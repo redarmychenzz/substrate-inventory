@@ -33,16 +33,16 @@ def find_col(headers, keys):
 def parse_blanks(rows):
     h_idx = 0
     for i, row in enumerate(rows[:5]):
-        if any(k in ''.join(row).lower() for k in ['批號','lot','規格','size']):
+        if any(k in ''.join(row) for k in ['載具','品號','規格']):
             h_idx = i; break
     hdr = rows[h_idx]
     C = {
-        'lot':  find_col(hdr, ['批號','lot']),
-        'spec': find_col(hdr, ['規格','spec','型號']),
-        'wh':   find_col(hdr, ['庫別','倉庫','warehouse','倉']),
-        'car':  find_col(hdr, ['載具','carrier']),
-        'pur':  find_col(hdr, ['目的','purpose','用途']),
-        'note': find_col(hdr, ['備註','note','remark']),
+        'lot':  find_col(hdr, ['品號']),
+        'spec': find_col(hdr, ['規格']),
+        'wh':   find_col(hdr, ['庫別']),
+        'car':  find_col(hdr, ['載具']),
+        'pur':  find_col(hdr, ['使用目的']),
+        'note': find_col(hdr, ['備註']),
     }
     result = []
     for row in rows[h_idx+1:]:
