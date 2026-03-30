@@ -31,25 +31,46 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
-    # 資料從第 4 列開始（index 3）
-    # D欄(3)=庫別, E欄(4)=載具, I欄(8)=規格, J欄(9)=品號, N欄(13)=使用目的, O欄(14)=備註
+    # Step 1: 找標題列（含「人員工號」且含「載具」的列）
+    h_idx = -1
+    for i, row in enumerate(rows):
+        joined = ''.join(row)
+        if '人員工號' in joined and '載具' in joined:
+            h_idx = i
+            break
+    if h_idx < 0:
+        raise ValueError('找不到 Blanks 標題列')
+
+    # Step 2: 從標題列確認各欄位的實際 index
+    hdr = rows[h_idx]
+    col_wh   = next((i for i,v in enumerate(hdr) if '庫別' in v), -1)
+    col_car  = next((i for i,v in enumerate(hdr) if '載具' in v), -1)
+    col_lot  = next((i for i,v in enumerate(hdr) if '品號' in v), -1)
+    col_spec = next((i for i,v in enumerate(hdr) if '規格' in v), -1)
+    col_pur  = next((i for i,v in enumerate(hdr) if '使用目的' in v), -1)
+    col_note = next((i for i,v in enumerate(hdr) if '備註' in v), -1)
+
+    print(f'  標題列在第 {h_idx+1} 列')
+    print(f'  欄位索引: 庫別={col_wh}, 載具={col_car}, 品號={col_lot}, 規格={col_spec}, 使用目的={col_pur}, 備註={col_note}')
+
+    # Step 3: 讀取資料列
     result = []
-    for row in rows[3:]:
-        if len(row) < 15: continue
-        wh = row[3].strip()
-        # 只保留庫別為 A倉 或 B倉 的資料
+    for row in rows[h_idx+1:]:
+        if col_wh < 0 or col_wh >= len(row): continue
+        wh = row[col_wh].strip()
         if 'A倉' not in wh and 'B倉' not in wh:
             continue
-        lot  = row[9].strip()   # J欄：品號
-        spec = row[8].strip()   # I欄：規格
-        car  = row[4].strip()   # E欄：載具
-        pur  = row[13].strip()  # N欄：使用目的
-        note = row[14].strip()  # O欄：備註
-        if not lot and not spec:
-            continue
+        def g(col): return row[col].strip() if col >= 0 and col < len(row) else ''
+        lot  = g(col_lot)
+        spec = g(col_spec)
+        if not lot and not spec: continue
         result.append({
-            'lot': lot, 'spec': spec, 'wh': wh,
-            'car': car, 'pur': pur, 'note': note
+            'lot':  lot,
+            'spec': spec,
+            'wh':   wh,
+            'car':  g(col_car),
+            'pur':  g(col_pur),
+            'note': g(col_note),
         })
     return result
 
