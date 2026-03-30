@@ -31,25 +31,26 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
-    h_idx = 0
-    for i, row in enumerate(rows[:5]):
-        if any(k in ''.join(row) for k in ['載具','品號','規格']):
-            h_idx = i; break
-    hdr = rows[h_idx]
-    C = {
-        'lot':  find_col(hdr, ['品號']),
-        'spec': find_col(hdr, ['規格']),
-        'wh':   find_col(hdr, ['庫別']),
-        'car':  find_col(hdr, ['載具']),
-        'pur':  find_col(hdr, ['使用目的']),
-        'note': find_col(hdr, ['備註']),
-    }
+    # 資料從第 4 列開始（index 3）
+    # D欄(3)=庫別, E欄(4)=載具, I欄(8)=規格, J欄(9)=品號, N欄(13)=使用目的, O欄(14)=備註
     result = []
-    for row in rows[h_idx+1:]:
-        if not any(row): continue
-        def g(k): return row[C[k]].strip() if C[k] >= 0 and C[k] < len(row) else ''
-        result.append({'lot':g('lot'),'spec':g('spec'),'wh':g('wh'),
-                       'car':g('car'),'pur':g('pur'),'note':g('note')})
+    for row in rows[3:]:
+        if len(row) < 15: continue
+        wh = row[3].strip()
+        # 只保留庫別為 A倉 或 B倉 的資料
+        if 'A倉' not in wh and 'B倉' not in wh:
+            continue
+        lot  = row[9].strip()   # J欄：品號
+        spec = row[8].strip()   # I欄：規格
+        car  = row[4].strip()   # E欄：載具
+        pur  = row[13].strip()  # N欄：使用目的
+        note = row[14].strip()  # O欄：備註
+        if not lot and not spec:
+            continue
+        result.append({
+            'lot': lot, 'spec': spec, 'wh': wh,
+            'car': car, 'pur': pur, 'note': note
+        })
     return result
 
 def parse_6012(rows):
@@ -109,6 +110,9 @@ if __name__ == '__main__':
     try:
         blanks = parse_blanks(fetch_csv(GID_BLANKS))
         print(f'✓ Blanks：{len(blanks)} 筆')
+        print('  前 5 筆：')
+        for i, b in enumerate(blanks[:5]):
+            print(f'  [{i}] {b}')
 
         unused, scrap, log = parse_6012(fetch_csv(GID_6012))
         print(f'✓ 6012：{len(log)} 筆紀錄，未使用 {unused} 片，可報廢 {scrap} 片')
