@@ -31,30 +31,41 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
-    # 欄位位置（0-based，對應 Google Sheets 欄位）：
-    # D=3(庫別), E=4(載具), I=8(規格), J=9(Metal Lot批號), N=13(使用目的), O=14(備註)
-    # 第1列(index 0)是標題，資料從 index 1 開始
+    # 從標題列找各欄位的實際 index（用欄位名稱比對，不用固定數字）
+    header = rows[0]
+    def find(name):
+        for i, v in enumerate(header):
+            if v.strip() == name:
+                return i
+        return -1
+
+    col_wh   = find('庫別')      # D欄
+    col_car  = find('載具')      # E欄
+    col_spec = find('規格')      # I欄
+    col_lot  = find('Metal Lot') # J欄
+    col_pur  = find('使用目的')  # N欄
+    col_note = find('備註')      # O欄
+
+    print(f'  欄位對應: 庫別={col_wh}, 載具={col_car}, 規格={col_spec}, Metal Lot={col_lot}, 使用目的={col_pur}, 備註={col_note}')
+
     result = []
     for row in rows[1:]:
-        if len(row) < 14:
+        if len(row) <= max(col_wh, col_car, col_spec, col_lot, col_pur, col_note):
             continue
-        wh = row[3].strip()   # D欄：庫別
+        wh = row[col_wh].strip() if col_wh >= 0 else ''
         if 'A倉' not in wh and 'B倉' not in wh:
             continue
-        lot  = row[9].strip()   # J欄：Metal Lot（批號）
-        spec = row[8].strip()   # I欄：規格
-        car  = row[4].strip()   # E欄：載具
-        pur  = row[13].strip()  # N欄：使用目的
-        note = row[14].strip()  # O欄：備註
+        lot  = row[col_lot].strip()  if col_lot  >= 0 else ''
+        spec = row[col_spec].strip() if col_spec >= 0 else ''
         if not lot and not spec:
             continue
         result.append({
             'lot':  lot,
             'spec': spec,
             'wh':   wh,
-            'car':  car,
-            'pur':  pur,
-            'note': note,
+            'car':  row[col_car].strip()  if col_car  >= 0 else '',
+            'pur':  row[col_pur].strip()  if col_pur  >= 0 else '',
+            'note': row[col_note].strip() if col_note >= 0 else '',
         })
     return result
 
