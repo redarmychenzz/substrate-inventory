@@ -31,8 +31,7 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
-    # 根據診斷確認的欄位 index（CSV 第1列是標題，資料從第2列開始）
-    # [3]=庫別, [4]=載具, [8]=規格, [9]=Metal Lot(批號), [13]=使用目的, [14]=備註
+    # [3]=庫別, [4]=載具, [8]=規格, [9]=Metal Lot, [13]=使用目的, [14]=備註
     result = []
     for row in rows[1:]:
         if len(row) < 15:
