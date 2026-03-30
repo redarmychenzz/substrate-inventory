@@ -31,22 +31,30 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
+    # 欄位位置（0-based，對應 Google Sheets 欄位）：
+    # D=3(庫別), E=4(載具), I=8(規格), J=9(Metal Lot批號), N=13(使用目的), O=14(備註)
+    # 第1列(index 0)是標題，資料從 index 1 開始
     result = []
-    for row in rows[1:]:  # 跳過第 1 列標題，從 index 1 開始
-        if len(row) < 14: continue
-        wh = row[3].strip()
+    for row in rows[1:]:
+        if len(row) < 14:
+            continue
+        wh = row[3].strip()   # D欄：庫別
         if 'A倉' not in wh and 'B倉' not in wh:
             continue
-        lot  = row[7].strip()
-        spec = row[8].strip()
-        if not lot and not spec: continue
+        lot  = row[9].strip()   # J欄：Metal Lot（批號）
+        spec = row[8].strip()   # I欄：規格
+        car  = row[4].strip()   # E欄：載具
+        pur  = row[13].strip()  # N欄：使用目的
+        note = row[14].strip()  # O欄：備註
+        if not lot and not spec:
+            continue
         result.append({
             'lot':  lot,
             'spec': spec,
             'wh':   wh,
-            'car':  row[4].strip(),
-            'pur':  row[13].strip(),
-            'note': row[14].strip(),
+            'car':  car,
+            'pur':  pur,
+            'note': note,
         })
     return result
 
