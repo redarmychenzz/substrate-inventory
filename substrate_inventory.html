@@ -818,7 +818,7 @@ async function loadBlanks() {
   if (STATIC_DATA !== null) {
     const hdr = ['規格', 'Metal Lot', '庫別', '載具', '使用目的', '備註'];
     const rows = [hdr, ...STATIC_DATA.blanks.map(e =>
-      [e.spec||'', e.lot||'', e.wh||'', e.carrier||'', e.purpose||'', e.note||''])];
+      [e.spec||'', e.lot||'', e.wh||'', e.car||'', e.pur||'', e.note||''])];
     renderBlanks(rows, '靜態資料 ' + (STATIC_DATA.generated || ''));
     return;
   }
