@@ -193,6 +193,65 @@
       --radius-sm: 14px;
       --font-num:  inherit;
     }
+
+    /* ══════════════════════════════════
+       💙 CYBER — DARK（原始藍色風格）
+    ══════════════════════════════════ */
+    [data-style="cyber"][data-theme="dark"] {
+      --bg:        #0d0f14;
+      --panel:     #141720;
+      --panel2:    #1c2030;
+      --border:    #2a2f3e;
+      --border2:   #1e2330;
+      --text:      #c8cdd8;
+      --text2:     #7a8299;
+      --text3:     #4a5166;
+      --heading:   #e8ecf4;
+      --accent:    #4a8fff;
+      --accent2:   #2dc9a0;
+      --blue-dim:  rgba(74,143,255,.15);
+      --teal-dim:  rgba(45,201,160,.15);
+      --amber-dim: rgba(245,166,35,.15);
+      --red-dim:   rgba(240,85,85,.15);
+      --green-dim: rgba(61,203,130,.15);
+      --gray-dim:  rgba(122,130,153,.15);
+      --hover:     rgba(255,255,255,.035);
+      --expand-bg: rgba(10,12,20,.5);
+      --shadow:    0 2px 12px rgba(0,0,0,.4);
+      --radius:    6px;
+      --radius-sm: 4px;
+      --font-num:  inherit;
+    }
+
+    /* ══════════════════════════════════
+       💙 CYBER — LIGHT（原始淺色風格）
+    ══════════════════════════════════ */
+    [data-style="cyber"][data-theme="light"] {
+      --bg:        #f0f2f7;
+      --panel:     #ffffff;
+      --panel2:    #f6f8fc;
+      --border:    #dde1ea;
+      --border2:   #e8eaf0;
+      --text:      #3a3f52;
+      --text2:     #6b7288;
+      --text3:     #9ba0b0;
+      --heading:   #1a1d28;
+      --accent:    #4a8fff;
+      --accent2:   #2dc9a0;
+      --blue-dim:  rgba(74,143,255,.1);
+      --teal-dim:  rgba(45,201,160,.1);
+      --amber-dim: rgba(245,166,35,.1);
+      --red-dim:   rgba(240,85,85,.1);
+      --green-dim: rgba(61,203,130,.1);
+      --gray-dim:  rgba(122,130,153,.1);
+      --hover:     rgba(0,0,0,.03);
+      --expand-bg: rgba(240,242,247,.6);
+      --shadow:    0 2px 12px rgba(0,0,0,.1);
+      --radius:    6px;
+      --radius-sm: 4px;
+      --font-num:  inherit;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'IBM Plex Sans TC', 'IBM Plex Mono', sans-serif;
@@ -742,6 +801,7 @@ const STATIC_DATA = null;
     <button class="style-btn" data-style="industrial" title="工業風">🏭</button>
     <button class="style-btn" data-style="glass" title="玻璃風">🔮</button>
     <button class="style-btn" data-style="cute" title="可愛風">🍬</button>
+    <button class="style-btn" data-style="cyber" title="科技藍">💙</button>
     <div class="theme-divider"></div>
     <button class="dark-toggle" id="darkToggle" title="切換深淺色">🌙</button>
   </div>
