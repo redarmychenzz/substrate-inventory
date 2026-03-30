@@ -1,0 +1,10 @@
+【首次設定】
+1. 在 Finder 找到「更新基板庫存.command」
+2. 右鍵 → 開啟（第一次需要授權執行）
+3. 之後雙擊就能直接執行
+
+【每次更新步驟】
+1. 更新 Google Sheets（照常）
+2. 雙擊「更新基板庫存.command」
+3. 等待完成，Finder 會自動開啟檔案位置
+4. 把 substrate_inventory_static.html 拖到 SharePoint 上傳覆蓋

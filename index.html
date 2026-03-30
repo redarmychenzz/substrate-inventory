@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOYA 基板庫存管理系統</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --panel: #141720;
+      --panel2: #1c2030;
+      --border: #2a2f3e;
+      --border2: #1e2330;
+      --text: #c8cdd8;
+      --text2: #7a8299;
+      --text3: #4a5166;
+      --heading: #e8ecf4;
+      --blue: #4a8fff;
+      --blue-dim: rgba(74,143,255,.15);
+      --teal: #2dc9a0;
+      --teal-dim: rgba(45,201,160,.15);
+      --amber: #f5a623;
+      --amber-dim: rgba(245,166,35,.15);
+      --red: #f05555;
+      --red-dim: rgba(240,85,85,.15);
+      --green: #3dcb82;
+      --green-dim: rgba(61,203,130,.15);
+      --gray-dim: rgba(122,130,153,.15);
+      --hover: rgba(255,255,255,.035);
+      --expand-bg: rgba(10,12,20,.5);
+      --shadow: 0 2px 12px rgba(0,0,0,.4);
+      --radius: 6px;
+      --radius-sm: 4px;
+      font-size: 15px;
+    }
+    [data-theme="light"] {
+      --bg: #f0f2f7;
+      --panel: #ffffff;
+      --panel2: #f6f8fc;
+      --border: #dde1ea;
+      --border2: #e8eaf0;
+      --text: #3a3f52;
+      --text2: #6b7288;
+      --text3: #9ba0b0;
+      --heading: #1a1d28;
+      --blue-dim: rgba(74,143,255,.1);
+      --teal-dim: rgba(45,201,160,.1);
+      --amber-dim: rgba(245,166,35,.1);
+      --red-dim: rgba(240,85,85,.1);
+      --green-dim: rgba(61,203,130,.1);
+      --gray-dim: rgba(122,130,153,.1);
+      --hover: rgba(0,0,0,.03);
+      --expand-bg: rgba(240,242,247,.6);
+      --shadow: 0 2px 12px rgba(0,0,0,.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'IBM Plex Sans TC', 'IBM Plex Mono', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background .2s, color .2s;
+    }
+    a { color: var(--blue); text-decoration: none; }
+
+    /* ─── HEADER ─── */
+    .header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    .header-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      color: var(--blue);
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--blue);
+      border-radius: var(--radius-sm);
+      opacity: .9;
+      white-space: nowrap;
+    }
+    .header-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--heading);
+      letter-spacing: .03em;
+      flex: 1;
+    }
+    .header-title span { color: var(--text2); font-weight: 300; margin-left: 6px; font-size: 12px; }
+    .theme-btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text2);
+      border-radius: var(--radius-sm);
+      padding: 5px 12px;
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .theme-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .theme-btn .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+    .reload-btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      transition: all .15s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .reload-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .last-update {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      white-space: nowrap;
+    }
+
+    /* ─── TABS ─── */
+    .tabs {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 2px;
+    }
+    .tab-btn {
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text2);
+      padding: 12px 18px;
+      font-size: 13px;
+      font-family: 'IBM Plex Sans TC', sans-serif;
+      font-weight: 500;
+      letter-spacing: .02em;
+      transition: all .15s;
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .tab-icon { font-size: 14px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    @media (max-width: 768px) { .main { padding: 16px; } }
+
+    /* ─── STATS CARDS ─── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--accent, var(--blue));
+    }
+    .stat-card.blue { --accent: var(--blue); }
+    .stat-card.teal { --accent: var(--teal); }
+    .stat-card.amber { --accent: var(--amber); }
+    .stat-card.red { --accent: var(--red); }
+    .stat-card.green { --accent: var(--green); }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text2);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--heading);
+      line-height: 1;
+    }
+    .stat-unit {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text2);
+      margin-left: 4px;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-top: 6px;
+    }
+
+    /* ─── TABLE ─── */
+    .table-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-header-bar {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .table-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      flex: 1;
+    }
+    .table-hint {
+      font-size: 11px;
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .search-bar {
+      display: flex; align-items: center;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0 10px;
+      gap: 8px;
+      flex: 1;
+      min-width: 200px;
+    }
+    .search-bar svg { flex-shrink: 0; opacity: .5; }
+    .search-bar input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      padding: 7px 0;
+      width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--text3); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    thead th {
+      background: var(--panel2);
+      padding: 9px 14px;
+      text-align: left;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text3);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    thead th.num { text-align: right; }
+    tbody tr.group-row {
+      cursor: pointer;
+      transition: background .1s;
+      border-bottom: 1px solid var(--border2);
+    }
+    tbody tr.group-row:hover { background: var(--hover); }
+    tbody tr.group-row td {
+      padding: 10px 14px;
+      vertical-align: middle;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    tbody tr.group-row td.num { text-align: right; }
+    .expand-icon {
+      display: inline-flex;
+      width: 18px; height: 18px;
+      align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      margin-right: 8px;
+      font-size: 10px;
+      color: var(--text3);
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+    .expand-icon.open { transform: rotate(90deg); border-color: var(--blue); color: var(--blue); }
+    .size-name {
+      display: flex;
+      align-items: center;
+      color: var(--text);
+      font-size: 12px;
+    }
+    .size-count {
+      font-size: 11px;
+      color: var(--text3);
+      margin-left: 8px;
+    }
+    /* expand detail rows */
+    .detail-section {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .25s ease;
+    }
+    .detail-section.open { max-height: 2000px; }
+    .detail-table-wrap {
+      background: var(--expand-bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-table-wrap table thead th {
+      background: transparent;
+      font-size: 9.5px;
+      padding: 7px 14px 7px 36px;
+      color: var(--text3);
+    }
+    .detail-table-wrap table thead th:first-child { padding-left: 52px; }
+    .detail-table-wrap table tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,.025);
+    }
+    [data-theme="light"] .detail-table-wrap table tbody tr {
+      border-bottom: 1px solid rgba(0,0,0,.04);
+    }
+    .detail-table-wrap table tbody tr:last-child { border-bottom: none; }
+    .detail-table-wrap table tbody td {
+      padding: 8px 14px 8px 36px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text2);
+      vertical-align: top;
+    }
+    .detail-table-wrap table tbody td:first-child { padding-left: 52px; }
+
+    /* plain tbody rows (for 6012 table) */
+    tbody tr.data-row {
+      border-bottom: 1px solid var(--border2);
+      transition: background .1s;
+    }
+    tbody tr.data-row:hover { background: var(--hover); }
+    tbody tr.data-row td {
+      padding: 9px 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      vertical-align: top;
+      color: var(--text);
+    }
+    tbody tr.data-row:last-child { border-bottom: none; }
+
+    /* ─── BADGES ─── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .badge.blue { background: var(--blue-dim); color: var(--blue); }
+    .badge.amber { background: var(--amber-dim); color: var(--amber); }
+    .badge.red { background: var(--red-dim); color: var(--red); }
+    .badge.green { background: var(--green-dim); color: var(--green); }
+    .badge.teal { background: var(--teal-dim); color: var(--teal); }
+    .badge.gray { background: var(--gray-dim); color: var(--text2); }
+
+    /* ─── NUM CELLS ─── */
+    .num-cell {
+      text-align: right;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--heading);
+      font-weight: 500;
+    }
+    .num-cell.a { color: var(--blue); }
+    .num-cell.b { color: var(--amber); }
+    .num-cell.total { color: var(--teal); font-weight: 600; }
+
+    /* ─── LOADING / ERROR ─── */
+    .state-box {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--text3);
+    }
+    .state-box .icon { font-size: 32px; margin-bottom: 12px; }
+    .state-box .msg { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+    .state-box .detail {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      max-width: 520px;
+      margin: 8px auto 0;
+      text-align: left;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      line-height: 1.8;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── SETTINGS PAGE ─── */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) { .settings-grid { grid-template-columns: 1fr; } }
+    .settings-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .settings-card h3 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .field-group { margin-bottom: 14px; }
+    .field-group:last-child { margin-bottom: 0; }
+    .field-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text2);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 5px;
+      letter-spacing: .04em;
+    }
+    .field-note {
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 4px;
+    }
+    .field-input {
+      width: 100%;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .field-input:focus { border-color: var(--blue); }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      transition: all .15s;
+      background: transparent;
+      color: var(--text2);
+    }
+    .btn:hover { border-color: var(--blue); color: var(--blue); }
+    .btn.primary {
+      background: var(--blue-dim);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 500;
+    }
+    .btn.primary:hover { background: rgba(74,143,255,.25); }
+    .btn.teal-btn {
+      background: var(--teal-dim);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .btn.teal-btn:hover { background: rgba(45,201,160,.25); }
+    .settings-url-preview {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      background: var(--panel2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      margin-top: 8px;
+      word-break: break-all;
+      line-height: 1.7;
+    }
+    .settings-url-preview .url-label {
+      color: var(--text3);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .settings-url-preview .url-val { color: var(--teal); }
+
+    /* ─── EMPTY ROW ─── */
+    .empty-row td {
+      text-align: center;
+      padding: 32px;
+      color: var(--text3);
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ─── MISC ─── */
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .text-dim { color: var(--text2); }
+    .text-muted { color: var(--text3); }
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+    .lot-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text);
+      letter-spacing: .02em;
+    }
+    .time-cell { color: var(--text2); font-size: 11.5px; }
+    .note-cell { color: var(--text3); font-style: italic; font-size: 11px; max-width: 200px; }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-title span { display: none; }
+      .last-update { display: none; }
+      thead th.hide-mobile, tbody td.hide-mobile { display: none; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .tabs { padding: 0 12px; }
+      .tab-btn { padding: 12px 10px; font-size: 12px; }
+    }
+  </style>
+<script id="static-data">
+// STATIC_DATA_START
+const STATIC_DATA = {"generated":"2026/03/30 10:45","blanks":[{"lot":"S180726002-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 GP","note":"-"},{"lot":"S160511003-R","spec":"(QZR520X800X10-R PSM)","wh":"A倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S180514011-R","spec":"(QZR520X800X10-R)","wh":"B倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S201022017-R","spec":"(QZ850X1000X10-R)","wh":"B倉","car":"Case","pur":"850x1000 Direct 補正片","note":"有光阻(已無使用需求?) / 誤植成 L5021611 批號"},{"lot":"S201221016-R","spec":"(QZ520X800X10-R )","wh":"A倉","car":"Case","pur":"New P8 Light test","note":"Eric mail"},{"lot":"T10225057","spec":"(QZ700X800X8HD)","wh":"A倉","car":"Case","pur":"送去台灣U.L 確認SLM 後付二次成膜","note":"-"},{"lot":"S200531001","spec":"(QZR800X920X10.0 Rim-PSM)","wh":"A倉","car":"Case","pur":"PSM 實驗片","note":"-"},{"lot":"S220129006-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 Direct","note":"有光阻"},{"lot":"121231-18E","spec":"(QZ700X800X8)","wh":"A倉","car":"Case","pur":"7080 GP","note":"無使用需求"},{"lot":"S201221004-R","spec":"(QZ520X800X10)","wh":"A倉","car":"Case","pur":"描畫借入硫酸根實驗片","note":"Eric mail"},{"lot":"S181205016-R","spec":"(QZ800X920X10)","wh":"B倉","car":"台車","pur":"MMS Daily mask","note":"-"},{"lot":"S250921004-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"GBM 實驗片","note":"寫過 TK 後付驗證 (寫歪)+GBM實驗*1"},{"lot":"S240602001-R","spec":"(QZR980X1550X10-R)","wh":"B倉","car":"Case","pur":"98155 Direct 補正片","note":"-"},{"lot":"SF251031-01HA9","spec":"(QZR850X1200X10)","wh":"A倉","car":"Case","pur":"CST HA 8512 Monthly","note":"-"},{"lot":"S250921005-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"8092 Monthly","note":"寫過一次 (TI)"},{"lot":"S241101009-R","spec":"(QZR800X920X8)","wh":"B倉","car":"Case","pur":"Pattern shift 檢查機標準片","note":"無使用需求(?)"},{"lot":"SR240807-05HA9","spec":"(QZR980X1150X13)","wh":"B倉","car":"Case","pur":"Nikon CD測試實驗品","note":"-"},{"lot":"S250312007-R","spec":"(QZR1220X1400X13SC-R)","wh":"B倉","car":"Case","pur":"1214 SC 後付驗證片","note":"-"},{"lot":"S250314006-R","spec":"(QZR1220X1400X13 MoSi-PSM)","wh":"B倉","car":"台車","pur":"PSM CD測試實驗片","note":"-"},{"lot":"S240107004-R","spec":"(QZR850X1200X10)","wh":"B倉","car":"Case","pur":"TG 8512 Direct","note":"-"},{"lot":"S241126002","spec":"(QZ980X1550X10)","wh":"B倉","car":"台車","pur":"98155 GP","note":"-"},{"lot":"S250921009-R","spec":"(QZR1220X1400X13)","wh":"A倉","car":"Case","pur":"1214 GP (新基板未寫)","note":"-"},{"lot":"S240820300","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"TK 後付驗證片"},{"lot":"240717-02HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"已使用待歸還 (TC BSLR testkey)"},{"lot":"240717-01HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"未使用，有光阻 (留存使用)"},{"lot":"SR240604-01HAOD5","spec":"(QZR850X1200X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"已寫 Monthly (留存使用)"},{"lot":"S250922001","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"Case","pur":"AFS BSLR testkey 測試","note":"與 L5-21092118 互換帳 (再成膜送錯)"},{"lot":"S250909001","spec":"(QZ520X800X10 MoSi-PSM)","wh":"B倉","car":"台車","pur":"TK PSM test key確認","note":"-"},{"lot":"S250926010-R","spec":"(QZR1220X1400X13 ISM-BSLR)","wh":"B倉","car":"台車","pur":"ISM CD NG 品","note":""},{"lot":"R260308-01HA9","spec":"(QZR800X920X10)","wh":"A倉","car":"Case","pur":"8092 CST Monthly","note":""}],"s6012":{"unused":86,"scrap":16,"rows":[{"emp":"T22010 (陳健煌)","time":"2026/3/23 下午 3:52:06","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Reg out","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/17 下午 3:06:26","mth":"報廢","mch":"其他","pat":"-","pm":"-","note":"補登記"},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 11:57:36","mth":"報廢","mch":"TI","pat":"Stage stain","pm":"Stage stain 確認","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 7:13:55","mth":"報廢","mch":"TI","pat":"座標連續量測","pm":"Stage stain","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 下午 3:12:06","mth":"報廢","mch":"TC","pat":"HOYA#3 hr beam alpha","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 上午 9:11:00","mth":"報廢","mch":"TC","pat":"HOYA#2","pm":"Laser exchange","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/5 下午 3:28:39","mth":"報廢","mch":"TC","pat":"HOYA","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/5 上午 10:04:34","mth":"報廢","mch":"TC","pat":"Monitor#2","pm":"Laser exchange","note":"X butting, sweeplength, focus offset, 降10% dose"},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:29","mth":"報廢","mch":"其他","pat":"N/A","pm":"光阻滴到水","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:11","mth":"報廢","mch":"TC","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:54:30","mth":"報廢","mch":"TK","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:06:00","mth":"報廢","mch":"TK","pat":"Hoya","pm":"Shutdown","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:05:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 3:04:44","mth":"報廢","mch":"TI","pat":"HOYA#2","pm":"斷電後CD結果待","note":"前一片 high side fail"},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 1:20:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"斷電CD結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 11:57:39","mth":"報廢","mch":"TI","pat":"Monitor#2 smile+highside","pm":"斷電cd結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 6:04:12","mth":"報廢","mch":"TI","pat":"Monitor#1","pm":"斷電後CD結果待確認","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/3 下午 3:57:45","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Shutdown","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 上午 10:40:00","mth":"報廢","mch":"TC","pat":"Motnitor#1","pm":"台電異常斷電","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 7:18:27","mth":"報廢","mch":"TI","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 4:26:44","mth":"報廢","mch":"TK","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 上午 11:31:00","mth":"報廢","mch":"TK","pat":"monitor","pm":"斷電復機2","note":""},{"emp":"T22015 (陳泓均)","time":"2026/2/10 下午 1:53:43","mth":"購入","mch":"其他","pat":"-","pm":"-","note":"40"},{"emp":"T16011 (詹欣融)","time":"2026/1/30 上午 1:30:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Pattern Shift 調機","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 6:00:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"擦去水污"},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 4:30:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"有水污"},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-07","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-08","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-09","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T24008 (邱俊良)","time":"2026/1/24 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"F-rack replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T16011 (詹欣融)","time":"2026/1/4 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/29 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Cliam","pm":"butting","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"kibpec","pm":"mura","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/23 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"HR,beam balance improve","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"QPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"QPM","note":""},{"emp":"T24008 (邱俊良)","time":"2025/12/19 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"Digital board replacement check","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/8 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 上午 8:49:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"P5","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 下午 3:52:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Skew ng","note":""}]}};
+// STATIC_DATA_END
+</script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">HOYA</div>
+  <div class="header-title">
+    基板庫存管理系統
+    <span>Photomask Blank Inventory</span>
+  </div>
+  <span class="last-update" id="lastUpdate"></span>
+  <button class="reload-btn" onclick="reloadData()" title="重新載入資料">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.85"/></svg>
+    重新載入
+  </button>
+  <button class="theme-btn" onclick="toggleTheme()">
+    <span class="dot"></span>
+    <span id="themeLabel">淺色</span>
+  </button>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('blanks', this)">
+    <span class="tab-icon">🧊</span> 基板現況
+  </button>
+  <button class="tab-btn" onclick="switchTab('6012', this)">
+    <span class="tab-icon">📦</span> 6012基板庫存
+  </button>
+</div>
+
+<!-- TAB: 基板現況 -->
+<div class="tab-content active" id="tab-blanks">
+  <div class="main">
+    <div id="blanks-content">
+      <div class="table-wrap">
+        <div class="state-box">
+          <div class="spinner"></div>
+          <div class="msg">載入基板庫存資料中…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: 6012基板庫存 -->
+<div class="tab-content" id="tab-6012">
+  <div class="main">
+    <div id="g6012-content">
+      <div class="table-wrap">
+        <div class="state-box">
+          <div class="spinner"></div>
+          <div class="msg">載入 6012 基板庫存資料中…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════════
+const LS = {
+  SHEET_ID: 'hy_sheetId',
+  BLANKS_GID: 'hy_blanksGid',
+  GID6012: 'hy_gid6012',
+  THEME: 'hy_theme',
+};
+const DEFAULTS = {
+  sheetId: '1lNGJ9hGziZYXHfUNbLFSqkyZB0bUFa0APvZL1QDbuSA',
+  blanksGid: '0',
+  gid6012: '6012基板庫存',
+};
+
+function getCfg() {
+  return {
+    sheetId: localStorage.getItem(LS.SHEET_ID) || DEFAULTS.sheetId,
+    blanksGid: localStorage.getItem(LS.BLANKS_GID) || DEFAULTS.blanksGid,
+    gid6012: localStorage.getItem(LS.GID6012) || DEFAULTS.gid6012,
+  };
+}
+
+// buildURL — for display / settings preview only (CSV format)
+function buildURL(sheetId, gidOrName) {
+  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+  return /^\d+$/.test(gidOrName)
+    ? `${base}&gid=${gidOrName}`
+    : `${base}&sheet=${encodeURIComponent(gidOrName)}`;
+}
+
+// ════════════════════════════════════════════
+//  GVIZ JSON → 2-D ROWS ARRAY
+// ════════════════════════════════════════════
+function gvizToRows(response) {
+  const table = response.table;
+  if (!table) return [];
+  const headers = table.cols.map(c => (c.label || '').trim());
+  const rows = [headers];
+  for (const row of (table.rows || [])) {
+    if (!row || !row.c) { rows.push(headers.map(() => '')); continue; }
+    const cells = row.c.map((cell, i) => {
+      if (!cell || cell.v === null || cell.v === undefined) return '';
+      const colType = (table.cols[i] || {}).type || '';
+      // Use formatted string for date/datetime
+      if (colType === 'datetime' || colType === 'date' || colType === 'timeofday') {
+        return cell.f || '';
+      }
+      return String(cell.v);
+    });
+    rows.push(cells);
+  }
+  // Remove trailing all-empty rows
+  while (rows.length > 1 && rows[rows.length - 1].every(c => !c)) rows.pop();
+  return rows;
+}
+
+// ════════════════════════════════════════════
+//  COLUMN DETECTION
+// ════════════════════════════════════════════
+function findCol(headers, keywords) {
+  const lh = headers.map(h => (h || '').toLowerCase().trim());
+  // 1. Exact match
+  for (const kw of keywords) {
+    const k = kw.toLowerCase();
+    const i = lh.findIndex(h => h === k);
+    if (i !== -1) return i;
+  }
+  // 2. Substring match (first keyword wins)
+  for (const kw of keywords) {
+    const k = kw.toLowerCase();
+    const i = lh.findIndex(h => h.includes(k));
+    if (i !== -1) return i;
+  }
+  return -1;
+}
+
+// ════════════════════════════════════════════
+//  FETCH via JSONP  (works with file:// + http://)
+// ════════════════════════════════════════════
+function fetchGVizJSON(sheetId, gidOrName) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'hy_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq`;
+    const gidParam = /^\d+$/.test(gidOrName)
+      ? `gid=${gidOrName}`
+      : `sheet=${encodeURIComponent(gidOrName)}`;
+    const url = `${base}?${gidParam}&tqx=out:json;responseHandler:${cbName}`;
+
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error('請求逾時（15s），請確認網路連線'));
+    }, 15000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      try { delete window[cbName]; } catch (_) {}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function(response) {
+      cleanup();
+      if (!response || !response.table) {
+        reject(new Error('SHEET_NOT_PUBLIC'));
+        return;
+      }
+      if (response.status === 'error') {
+        const msg = (response.errors || []).map(e => e.message).join('; ') || 'SHEET_ERROR';
+        reject(new Error(msg));
+        return;
+      }
+      resolve(gvizToRows(response));
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('SCRIPT_LOAD_ERROR'));
+    };
+
+    script.src = url;
+    document.head.appendChild(script);
+  });
+}
+
+// ════════════════════════════════════════════
+//  ERROR DISPLAY
+// ════════════════════════════════════════════
+function errBox(containerId, url, errMsg) {
+  const isAccess = errMsg === 'SHEET_NOT_PUBLIC' || errMsg === 'SCRIPT_LOAD_ERROR';
+  let icon = '⚠️', title = '資料載入失敗', detail;
+  if (isAccess) {
+    icon = '🔒';
+    title = '無法存取試算表';
+    detail = `可能原因：\n• Google Sheets 尚未設定公開分享（「知道連結的人可以檢視」）\n• GID 或分頁名稱設定錯誤\n\n解決步驟：\n1. 開啟 Google Sheets → 右上角「共用」\n2. 將連結存取權改為「知道連結的人」→「檢視者」\n3. 確認 GID / 分頁名稱設定正確\n\n請求 URL：${url}`;
+  } else if (errMsg.includes('逾時')) {
+    icon = '⏱️';
+    title = '連線逾時';
+    detail = `${errMsg}\n請求 URL：${url}`;
+  } else {
+    detail = `錯誤訊息：${errMsg}\n請求 URL：${url}`;
+  }
+  document.getElementById(containerId).innerHTML = `
+    <div class="table-wrap">
+      <div class="state-box">
+        <div class="icon">${icon}</div>
+        <div class="msg">${title}</div>
+        <div class="detail">${detail.replace(/\n/g, '<br>')}</div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════
+//  PARSE SIZE
+// ════════════════════════════════════════════
+function parseSize(spec) {
+  const m = spec.match(/(\d+[Xx]\d+[Xx]\d+)/);
+  if (!m) return null;
+  return m[1].toUpperCase();
+}
+
+// ════════════════════════════════════════════
+//  TAB 1 — BLANKS
+// ════════════════════════════════════════════
+async function loadBlanks() {
+  if (STATIC_DATA !== null) {
+    const hdr = ['規格', 'Metal Lot', '庫別', '載具', '使用目的', '備註'];
+    const rows = [hdr, ...STATIC_DATA.blanks.map(e =>
+      [e.spec||'', e.lot||'', e.wh||'', e.carrier||'', e.purpose||'', e.note||''])];
+    renderBlanks(rows, '靜態資料 ' + (STATIC_DATA.generated || ''));
+    return;
+  }
+  const cfg = getCfg();
+  const url = buildURL(cfg.sheetId, cfg.blanksGid);
+  document.getElementById('blanks-content').innerHTML = `
+    <div class="table-wrap"><div class="state-box">
+      <div class="spinner"></div><div class="msg">載入基板庫存資料…</div>
+    </div></div>`;
+  try {
+    const rows = await fetchGVizJSON(cfg.sheetId, cfg.blanksGid);
+    renderBlanks(rows, url);
+  } catch (e) {
+    errBox('blanks-content', url, e.message);
+  }
+}
+
+function renderBlanks(rows, url) {
+  if (rows.length < 2) {
+    document.getElementById('blanks-content').innerHTML =
+      `<div class="table-wrap"><div class="state-box"><div class="icon">📭</div><div class="msg">資料表為空</div></div></div>`;
+    return;
+  }
+  const headers = rows[0];
+  const data = rows.slice(1).filter(r => r.some(c => c.trim()));
+
+  // Column detection
+  const colSize    = findCol(headers, ['規格', 'size', '尺寸']);
+  const colLot     = findCol(headers, ['metal lot', '批號', 'lot']);
+  const colWH      = findCol(headers, ['庫別', '倉庫', 'warehouse']);
+  const colCarrier = findCol(headers, ['載具', 'carrier']);
+  const colPurpose = findCol(headers, ['使用目的', '目的', 'purpose', '用途']);
+  const colNote    = findCol(headers, ['備註', 'note']);
+
+  // Filter valid rows (must have warehouse info)
+  const valid = data.filter(r => {
+    const wh = (r[colWH] || '').trim();
+    return wh === 'A倉' || wh === 'B倉';
+  });
+
+  // Group by 規格
+  const sizeMap = new Map();
+  for (const r of valid) {
+    const raw = (r[colSize] || '').trim();
+    const sizeKey = parseSize(raw);
+    if (sizeKey === null) continue;
+    if (!sizeMap.has(sizeKey)) sizeMap.set(sizeKey, []);
+    sizeMap.get(sizeKey).push(r);
+  }
+
+  // Stats
+  const totalA = valid.filter(r => r[colWH].trim() === 'A倉').length;
+  const totalB = valid.filter(r => r[colWH].trim() === 'B倉').length;
+  const total  = totalA + totalB;
+  const sizeCount = sizeMap.size;
+
+  // Stats header parse (optional, as supplementary info)
+  let headerNote = '';
+  const hStat = (headers[2] || '') + (headers[0] || '');
+  const mA = hStat.match(/A倉[：:]\s*(\d+)\s*片/);
+  const mB = hStat.match(/B倉[：:]\s*(\d+)\s*片/);
+  if (mA && mB) {
+    const sheetA = parseInt(mA[1]), sheetB = parseInt(mB[1]);
+    if (sheetA + sheetB !== total) {
+      headerNote = `<div class="field-note" style="color:var(--amber)">⚠ 試算表公式顯示 A:${sheetA}/B:${sheetB}，與讀取筆數不同</div>`;
+    }
+  }
+
+  // Render
+  let html = `
+  <div class="stats-grid">
+    <div class="stat-card teal">
+      <div class="stat-label">總庫存</div>
+      <div class="stat-value">${total}<span class="stat-unit">片</span></div>
+      <div class="stat-sub">A倉 ${totalA} / B倉 ${totalB}</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">A 倉數量</div>
+      <div class="stat-value">${totalA}<span class="stat-unit">片</span></div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">B 倉數量</div>
+      <div class="stat-value">${totalB}<span class="stat-unit">片</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">尺寸種類</div>
+      <div class="stat-value">${sizeCount}<span class="stat-unit">種</span></div>
+    </div>
+  </div>
+  ${headerNote}
+  <div class="table-wrap">
+    <div class="table-header-bar">
+      <div class="table-title">基板尺寸庫存彙整</div>
+      <div class="table-hint">點擊行展開批號明細</div>
+      <button onclick="loadBlanks()" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);cursor:pointer;">↻ 重新整理</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>規格 / Size</th>
+          <th class="num">A 倉</th>
+          <th class="num">B 倉</th>
+          <th class="num">合計</th>
+        </tr>
+      </thead>
+      <tbody id="blanks-tbody">`;
+
+  let idx = 0;
+  for (const [sizeKey, items] of [...sizeMap.entries()].sort((a, b) => {
+    const [a1, a2, a3] = a[0].split('X').map(Number);
+    const [b1, b2, b3] = b[0].split('X').map(Number);
+    return (a1 - b1) || (a2 - b2) || (a3 - b3);
+  })) {
+    const cntA = items.filter(r => r[colWH].trim() === 'A倉').length;
+    const cntB = items.filter(r => r[colWH].trim() === 'B倉').length;
+    const cntT = cntA + cntB;
+    const rowId = `size-${idx++}`;
+
+    html += `
+      <tr class="group-row" onclick="toggleExpand('${rowId}')">
+        <td>
+          <div class="size-name">
+            <span class="expand-icon" id="icon-${rowId}">▶</span>
+            <span class="mono" style="font-size:12.5px;">${escHtml(sizeKey)}</span>
+            <span class="size-count">(${cntT} 片)</span>
+          </div>
+        </td>
+        <td class="num num-cell a">${cntA > 0 ? cntA : '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="num num-cell b">${cntB > 0 ? cntB : '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="num num-cell total">${cntT}</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="padding:0;">
+          <div class="detail-section" id="${rowId}">
+            <div class="detail-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>批號 / Lot No</th>
+                    <th>規格</th>
+                    <th>庫別</th>
+                    <th>載具</th>
+                    <th class="hide-mobile">使用目的</th>
+                    <th class="hide-mobile">備註</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+
+    for (const r of items) {
+      const wh = (r[colWH] || '').trim();
+      const lot = (colLot >= 0 ? r[colLot] : '') || '—';
+      const spec = (colSize >= 0 ? r[colSize] : '') || '';
+      const carrier = (colCarrier >= 0 ? r[colCarrier] : '') || '—';
+      const purpose = (colPurpose >= 0 ? r[colPurpose] : '') || '';
+      const note = (colNote >= 0 ? r[colNote] : '') || '';
+      const whClass = wh === 'A倉' ? 'blue' : 'amber';
+      html += `
+                  <tr>
+                    <td class="lot-id">${escHtml(lot)}</td>
+                    <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:11px;">${escHtml(spec || '—')}</td>
+                    <td><span class="badge ${whClass}">${escHtml(wh)}</span></td>
+                    <td>${escHtml(carrier)}</td>
+                    <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
+                    <td class="hide-mobile note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
+                  </tr>`;
+    }
+
+    html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>`;
+  }
+
+  html += `</tbody></table></div>`;
+  document.getElementById('blanks-content').innerHTML = html;
+  updateLastUpdate();
+}
+
+function toggleExpand(id) {
+  const el = document.getElementById(id);
+  const icon = document.getElementById('icon-' + id);
+  if (!el || !icon) return;
+  const open = el.classList.toggle('open');
+  icon.textContent = open ? '▼' : '▶';
+  icon.classList.toggle('open', open);
+}
+
+// ════════════════════════════════════════════
+//  TAB 2 — 6012 基板庫存
+// ════════════════════════════════════════════
+let _6012Rows = [], _6012Headers = [];
+
+async function load6012() {
+  if (STATIC_DATA !== null) {
+    const { unused, scrap, rows } = STATIC_DATA.s6012;
+    const fakeHdr = [
+      'ID',
+      `未使用庫存：${unused||0} 片 ║ 可報廢：${scrap||0} 片 ║ 實際總數量：${rows.length} 片 ║ 帳上數量：— 片 人員工號`,
+      '時間', '方式', '機台', '描畫 Pattern', 'PM 項目', '備註', '調倉'
+    ];
+    const dataRows = rows.map(r => ['', r.emp||'', r.time||'', r.mth||'', r.mch||'', r.pat||'', r.pm||'', r.note||'', '']);
+    _6012Headers = fakeHdr;
+    _6012Rows = dataRows;
+    render6012(dataRows, fakeHdr);
+    window._6012done = true;
+    return;
+  }
+  const cfg = getCfg();
+  const url = buildURL(cfg.sheetId, cfg.gid6012);
+  document.getElementById('g6012-content').innerHTML = `
+    <div class="table-wrap"><div class="state-box">
+      <div class="spinner"></div><div class="msg">載入 6012 基板庫存資料…</div>
+    </div></div>`;
+  try {
+    const rows = await fetchGVizJSON(cfg.sheetId, cfg.gid6012);
+    _6012Headers = rows[0] || [];
+    _6012Rows = rows.slice(1).filter(r => r.some(c => c.trim()));
+    render6012(_6012Rows, _6012Headers);
+  } catch (e) {
+    errBox('g6012-content', url, e.message);
+  }
+}
+
+function render6012(rows, headers) {
+  // Parse stats from column B header label
+  const hB = headers[1] || '';
+  const mUnused = hB.match(/未使用庫存[：:]\s*(\d+)\s*片/);
+  const mScrap  = hB.match(/可報廢[：:]\s*(\d+)\s*片/);
+  const mTotal  = hB.match(/實際總數量[：:]\s*(\d+)\s*片/);
+  const mBook   = hB.match(/帳上數量[：:]\s*(\d+)\s*片/);
+  const unused  = mUnused ? mUnused[1] : '—';
+  const scrap   = mScrap  ? mScrap[1]  : '—';
+  const realTotal = mTotal ? mTotal[1] : '—';
+  const bookTotal = mBook  ? mBook[1]  : '—';
+
+  // Column indices
+  const colEmployee = findCol(headers, ['人員工號', '工號', 'employee']);
+  const colTime     = findCol(headers, ['時間', 'time', 'date']);
+  const colMethod   = findCol(headers, ['方式', 'method', 'type']);
+  const colMachine  = findCol(headers, ['機台', 'machine']);
+  const colPattern  = findCol(headers, ['描畫 pattern', 'pattern', '描畫']);
+  const colPM       = findCol(headers, ['pm 項目', 'pm項目', 'pm']);
+  const colNote     = findCol(headers, ['備註', 'note']);
+  const colAdj      = findCol(headers, ['調倉']);
+
+  const methodBadge = (m) => {
+    const t = (m || '').trim();
+    if (t === '報廢') return `<span class="badge red">報廢</span>`;
+    if (t === '描畫') return `<span class="badge blue">描畫</span>`;
+    if (t === '退料') return `<span class="badge green">退料</span>`;
+    if (t === '購入') return `<span class="badge teal">購入</span>`;
+    if (t === '留存') return `<span class="badge gray">留存</span>`;
+    return t ? `<span class="badge gray">${escHtml(t)}</span>` : '';
+  };
+
+  // Count by method
+  const cntMap = {};
+  for (const r of rows) {
+    const m = (r[colMethod] || '').trim();
+    cntMap[m] = (cntMap[m] || 0) + 1;
+  }
+
+  let html = `
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-label">未使用庫存</div>
+      <div class="stat-value">${unused}<span class="stat-unit">片</span></div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">可報廢</div>
+      <div class="stat-value">${scrap}<span class="stat-unit">片</span></div>
+    </div>
+    <div class="stat-card teal">
+      <div class="stat-label">紀錄筆數</div>
+      <div class="stat-value">${rows.length}<span class="stat-unit">筆</span></div>
+      <div class="stat-sub">實際 ${realTotal}片 ／ 帳上 ${bookTotal}片</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">報廢筆數</div>
+      <div class="stat-value">${cntMap['報廢'] || 0}<span class="stat-unit">筆</span></div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <div class="table-header-bar">
+      <div class="table-title">6012 基板使用紀錄</div>
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search6012" placeholder="搜尋 工號 / 方式 / 機台 / Pattern…" oninput="filter6012(this.value)">
+      </div>
+      <button onclick="load6012()" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);cursor:pointer;">↻ 重新整理</button>
+    </div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>人員工號</th>
+          <th>時間</th>
+          <th>方式</th>
+          <th>機台</th>
+          <th class="hide-mobile">描畫 Pattern</th>
+          <th class="hide-mobile">PM 項目</th>
+          <th class="hide-mobile">備註</th>
+          <th class="hide-mobile">調倉</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-6012">`;
+
+  rows = [...rows].sort((a, b) => {
+    const ta = parseChineseDateTime(colTime >= 0 ? a[colTime] : '');
+    const tb = parseChineseDateTime(colTime >= 0 ? b[colTime] : '');
+    return tb - ta;
+  });
+  html += render6012Rows(rows, colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge);
+  html += `</tbody></table></div></div>`;
+  document.getElementById('g6012-content').innerHTML = html;
+  // Store cols for filter
+  window._6012Cols = { colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge };
+  updateLastUpdate();
+}
+
+function render6012Rows(rows, colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge) {
+  if (!rows.length) return `<tr class="empty-row"><td colspan="8">— 無符合資料 —</td></tr>`;
+  let html = '';
+  for (const r of rows) {
+    const emp     = escHtml((r[colEmployee] || '').trim());
+    const time    = escHtml(formatTime((r[colTime] || '').trim()));
+    const method  = methodBadge(r[colMethod]);
+    const machine = escHtml((r[colMachine] || '').trim());
+    const pattern = escHtml((r[colPattern] || '').trim());
+    const pm      = escHtml((r[colPM] || '').trim());
+    const note    = escHtml((r[colNote] || '').trim());
+    const adj     = escHtml((r[colAdj] || '').trim());
+    html += `
+      <tr class="data-row">
+        <td style="white-space:nowrap;">${emp || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="time-cell" style="white-space:nowrap;">${time || '—'}</td>
+        <td style="white-space:nowrap;">${method}</td>
+        <td>${machine || '—'}</td>
+        <td class="hide-mobile">${pattern || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="hide-mobile">${pm || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="hide-mobile note-cell">${note}</td>
+        <td class="hide-mobile" style="color:var(--text3);font-size:11px;">${adj}</td>
+      </tr>`;
+  }
+  return html;
+}
+
+function render6012Static(rows) {
+  const sorted = [...rows].sort((a, b) => {
+    return parseChineseDateTime(b.time) - parseChineseDateTime(a.time);
+  });
+  let html = '';
+  for (const r of sorted) {
+    const mth = r.mth || '';
+    const cls = /描畫|write|寫|曝光/i.test(mth) ? 'blue'
+              : /報廢|scrap/i.test(mth)          ? 'red'
+              : /退料|return/i.test(mth)          ? 'green'
+              : /購入|buy|purchase/i.test(mth)    ? 'teal' : 'gray';
+    html += `
+      <tr class="data-row">
+        <td style="white-space:nowrap;">${escHtml(r.emp||'') || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="time-cell" style="white-space:nowrap;">${escHtml(r.time||'') || '—'}</td>
+        <td style="white-space:nowrap;"><span class="badge ${cls}">${escHtml(mth) || '—'}</span></td>
+        <td>${escHtml(r.mch||'') || '—'}</td>
+        <td class="hide-mobile">${escHtml(r.pat||'') || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="hide-mobile">${escHtml(r.pm||'') || '<span style="color:var(--text3)">—</span>'}</td>
+        <td class="hide-mobile note-cell">${escHtml(r.note||'')}</td>
+        <td class="hide-mobile" style="color:var(--text3);font-size:11px;"></td>
+      </tr>`;
+  }
+  const tbody = document.getElementById('tbody-6012');
+  if (tbody) tbody.innerHTML = html || `<tr class="empty-row"><td colspan="8">— 無符合資料 —</td></tr>`;
+}
+
+function filter6012(q) {
+  if (STATIC_DATA !== null) {
+    const kw = document.getElementById('search6012').value.toLowerCase();
+    const rows = STATIC_DATA.s6012.rows;
+    const filtered = kw
+      ? rows.filter(r => Object.values(r).join(' ').toLowerCase().includes(kw))
+      : rows;
+    render6012Static(filtered);
+    return;
+  }
+  const query = q.trim().toLowerCase();
+  const cols = window._6012Cols;
+  if (!cols) return;
+  let filtered = !query ? [..._6012Rows] : _6012Rows.filter(r =>
+    r.some(c => c.toLowerCase().includes(query))
+  );
+  filtered.sort((a, b) => {
+    const ta = parseChineseDateTime(cols.colTime >= 0 ? a[cols.colTime] : '');
+    const tb = parseChineseDateTime(cols.colTime >= 0 ? b[cols.colTime] : '');
+    return tb - ta;
+  });
+  const { colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge } = cols;
+  document.getElementById('tbody-6012').innerHTML =
+    render6012Rows(filtered, colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge);
+}
+
+function parseChineseDateTime(str) {
+  if (!str) return 0;
+  const m = str.match(/(\d{4})\/(\d{1,2})\/(\d{1,2})\s*(上午|下午)?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if (!m) return 0;
+  let [, yr, mo, dy, ampm, hr, min, sec] = m;
+  hr  = parseInt(hr,  10);
+  min = parseInt(min, 10);
+  sec = parseInt(sec || '0', 10);
+  if (ampm === '下午' && hr !== 12) hr += 12;
+  if (ampm === '上午' && hr === 12) hr = 0;
+  return new Date(parseInt(yr), parseInt(mo)-1, parseInt(dy), hr, min, sec).getTime();
+}
+
+function formatTime(t) {
+  // gviz CSV datetime format: "2026/3/23 下午 3:52:06" or ISO
+  return t;
+}
+
+
+
+// ════════════════════════════════════════════
+//  THEME
+// ════════════════════════════════════════════
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  document.getElementById('themeLabel').textContent = theme === 'dark' ? '淺色' : '深色';
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.dataset.theme;
+  const next = cur === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(LS.THEME, next);
+  applyTheme(next);
+}
+
+// ════════════════════════════════════════════
+//  TABS
+// ════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ════════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════════
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updateLastUpdate() {
+  const el = document.getElementById('lastUpdate');
+  if (el) {
+    const now = new Date();
+    el.textContent = `更新: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  }
+}
+
+function reloadData() {
+  const activeTab = document.querySelector('.tab-content.active')?.id;
+  if (activeTab === 'tab-blanks' || !activeTab) { loadBlanks(); load6012(); }
+  else if (activeTab === 'tab-6012') { load6012(); }
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+function init() {
+  // Theme
+  const savedTheme = localStorage.getItem(LS.THEME) || 'dark';
+  applyTheme(savedTheme);
+
+  // Load data
+  loadBlanks();
+  load6012();
+}
+
+init();
+</script>
+</body>
+</html>
