@@ -1,58 +1,197 @@
 <!DOCTYPE html>
-<html lang="zh-TW" data-theme="dark">
+<html lang="zh-TW" data-style="industrial" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>基板庫存管理系統</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
+    /* ── 共用不變變數 ── */
     :root {
-      --bg: #0d0f14;
-      --panel: #141720;
-      --panel2: #1c2030;
-      --border: #2a2f3e;
-      --border2: #1e2330;
-      --text: #c8cdd8;
-      --text2: #7a8299;
-      --text3: #4a5166;
-      --heading: #e8ecf4;
-      --blue: #4a8fff;
-      --blue-dim: rgba(74,143,255,.15);
-      --teal: #2dc9a0;
-      --teal-dim: rgba(45,201,160,.15);
-      --amber: #f5a623;
-      --amber-dim: rgba(245,166,35,.15);
-      --red: #f05555;
-      --red-dim: rgba(240,85,85,.15);
-      --green: #3dcb82;
-      --green-dim: rgba(61,203,130,.15);
-      --gray-dim: rgba(122,130,153,.15);
-      --hover: rgba(255,255,255,.035);
-      --expand-bg: rgba(10,12,20,.5);
-      --shadow: 0 2px 12px rgba(0,0,0,.4);
-      --radius: 6px;
-      --radius-sm: 4px;
+      --blue:   #4a8fff;
+      --teal:   #2dc9a0;
+      --amber:  #f5a623;
+      --red:    #f05555;
+      --green:  #3dcb82;
       font-size: 15px;
     }
-    [data-theme="light"] {
-      --bg: #f0f2f7;
-      --panel: #ffffff;
-      --panel2: #f6f8fc;
-      --border: #dde1ea;
-      --border2: #e8eaf0;
-      --text: #3a3f52;
-      --text2: #6b7288;
-      --text3: #9ba0b0;
-      --heading: #1a1d28;
-      --blue-dim: rgba(74,143,255,.1);
-      --teal-dim: rgba(45,201,160,.1);
-      --amber-dim: rgba(245,166,35,.1);
-      --red-dim: rgba(240,85,85,.1);
+
+    /* ══════════════════════════════════
+       🏭 INDUSTRIAL — DARK
+    ══════════════════════════════════ */
+    [data-style="industrial"][data-theme="dark"] {
+      --bg:        #080a0e;
+      --panel:     #0f1117;
+      --panel2:    #161a22;
+      --border:    #2a3040;
+      --border2:   #1e2230;
+      --text:      #b0c0a0;
+      --text2:     #607050;
+      --text3:     #3a4530;
+      --heading:   #00ff88;
+      --accent:    #00ff88;
+      --accent2:   #00cc66;
+      --blue-dim:  rgba(0,255,136,.12);
+      --teal-dim:  rgba(0,255,136,.08);
+      --amber-dim: rgba(245,166,35,.15);
+      --red-dim:   rgba(240,85,85,.15);
+      --green-dim: rgba(0,255,136,.15);
+      --gray-dim:  rgba(96,112,80,.15);
+      --hover:     rgba(0,255,136,.04);
+      --expand-bg: rgba(4,6,10,.6);
+      --shadow:    0 2px 16px rgba(0,0,0,.6);
+      --radius:    0px;
+      --radius-sm: 0px;
+      --font-num:  'Courier New', 'Lucida Console', monospace;
+    }
+
+    /* ══════════════════════════════════
+       🏭 INDUSTRIAL — LIGHT
+    ══════════════════════════════════ */
+    [data-style="industrial"][data-theme="light"] {
+      --bg:        #f2f0e8;
+      --panel:     #ffffff;
+      --panel2:    #f8f6f0;
+      --border:    #c0bba8;
+      --border2:   #d8d4c8;
+      --text:      #2a3020;
+      --text2:     #5a6050;
+      --text3:     #9a9f90;
+      --heading:   #1a3a10;
+      --accent:    #1a6b3c;
+      --accent2:   #2a8a50;
+      --blue-dim:  rgba(26,107,60,.1);
+      --teal-dim:  rgba(26,107,60,.08);
+      --amber-dim: rgba(245,166,35,.15);
+      --red-dim:   rgba(240,85,85,.12);
+      --green-dim: rgba(26,107,60,.12);
+      --gray-dim:  rgba(90,96,80,.1);
+      --hover:     rgba(0,0,0,.04);
+      --expand-bg: rgba(242,240,232,.7);
+      --shadow:    0 2px 12px rgba(0,0,0,.12);
+      --radius:    0px;
+      --radius-sm: 0px;
+      --font-num:  'Courier New', 'Lucida Console', monospace;
+    }
+
+    /* ══════════════════════════════════
+       🔮 GLASS — DARK
+    ══════════════════════════════════ */
+    [data-style="glass"][data-theme="dark"] {
+      --bg:        #0e0820;
+      --panel:     rgba(255,255,255,.07);
+      --panel2:    rgba(255,255,255,.04);
+      --border:    rgba(167,139,250,.2);
+      --border2:   rgba(167,139,250,.1);
+      --text:      #ddd8f8;
+      --text2:     #9890c0;
+      --text3:     #5a5580;
+      --heading:   #f0ecff;
+      --accent:    #a78bfa;
+      --accent2:   #60a5fa;
+      --blue-dim:  rgba(167,139,250,.15);
+      --teal-dim:  rgba(96,165,250,.12);
+      --amber-dim: rgba(245,166,35,.15);
+      --red-dim:   rgba(240,85,85,.15);
+      --green-dim: rgba(61,203,130,.12);
+      --gray-dim:  rgba(152,144,192,.12);
+      --hover:     rgba(167,139,250,.06);
+      --expand-bg: rgba(14,8,32,.5);
+      --shadow:    0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(167,139,250,.15);
+      --radius:    12px;
+      --radius-sm: 8px;
+      --font-num:  inherit;
+      --glass-blur: blur(16px);
+      --bg-gradient: linear-gradient(135deg, #0e0820 0%, #12082e 50%, #0a1020 100%);
+    }
+
+    /* ══════════════════════════════════
+       🔮 GLASS — LIGHT
+    ══════════════════════════════════ */
+    [data-style="glass"][data-theme="light"] {
+      --bg:        #f0edff;
+      --panel:     rgba(255,255,255,.65);
+      --panel2:    rgba(255,255,255,.45);
+      --border:    rgba(139,92,246,.2);
+      --border2:   rgba(139,92,246,.1);
+      --text:      #2d2550;
+      --text2:     #7060a0;
+      --text3:     #b0a0d0;
+      --heading:   #1a1038;
+      --accent:    #7c3aed;
+      --accent2:   #3b82f6;
+      --blue-dim:  rgba(124,58,237,.1);
+      --teal-dim:  rgba(59,130,246,.1);
+      --amber-dim: rgba(245,166,35,.12);
+      --red-dim:   rgba(240,85,85,.1);
       --green-dim: rgba(61,203,130,.1);
-      --gray-dim: rgba(122,130,153,.1);
-      --hover: rgba(0,0,0,.03);
-      --expand-bg: rgba(240,242,247,.6);
-      --shadow: 0 2px 12px rgba(0,0,0,.1);
+      --gray-dim:  rgba(112,96,160,.1);
+      --hover:     rgba(124,58,237,.05);
+      --expand-bg: rgba(240,237,255,.7);
+      --shadow:    0 4px 24px rgba(124,58,237,.12), 0 0 0 1px rgba(139,92,246,.15);
+      --radius:    12px;
+      --radius-sm: 8px;
+      --font-num:  inherit;
+      --glass-blur: blur(12px);
+      --bg-gradient: linear-gradient(135deg, #f0edff 0%, #e8e0ff 50%, #edf5ff 100%);
+    }
+
+    /* ══════════════════════════════════
+       🍬 CUTE — DARK
+    ══════════════════════════════════ */
+    [data-style="cute"][data-theme="dark"] {
+      --bg:        #1a1040;
+      --panel:     #251848;
+      --panel2:    #2e2058;
+      --border:    #4a3880;
+      --border2:   #362a68;
+      --text:      #f0d8ff;
+      --text2:     #c0a0e0;
+      --text3:     #806090;
+      --heading:   #ffd6f0;
+      --accent:    #ff6b9d;
+      --accent2:   #ffd93d;
+      --blue-dim:  rgba(255,107,157,.15);
+      --teal-dim:  rgba(255,217,61,.12);
+      --amber-dim: rgba(255,217,61,.2);
+      --red-dim:   rgba(255,107,157,.2);
+      --green-dim: rgba(100,220,150,.15);
+      --gray-dim:  rgba(192,160,224,.12);
+      --hover:     rgba(255,107,157,.06);
+      --expand-bg: rgba(20,10,50,.5);
+      --shadow:    0 4px 20px rgba(255,107,157,.15);
+      --radius:    20px;
+      --radius-sm: 14px;
+      --font-num:  inherit;
+    }
+
+    /* ══════════════════════════════════
+       🍬 CUTE — LIGHT
+    ══════════════════════════════════ */
+    [data-style="cute"][data-theme="light"] {
+      --bg:        #fff8f0;
+      --panel:     #ffffff;
+      --panel2:    #fff0f8;
+      --border:    #ffd6e8;
+      --border2:   #ffe8f4;
+      --text:      #4a2840;
+      --text2:     #9a6880;
+      --text3:     #c8a0b8;
+      --heading:   #2a1030;
+      --accent:    #ff6b9d;
+      --accent2:   #ff9500;
+      --blue-dim:  rgba(255,107,157,.1);
+      --teal-dim:  rgba(255,149,0,.1);
+      --amber-dim: rgba(255,217,61,.2);
+      --red-dim:   rgba(255,107,157,.15);
+      --green-dim: rgba(100,220,150,.12);
+      --gray-dim:  rgba(154,104,128,.1);
+      --hover:     rgba(255,107,157,.05);
+      --expand-bg: rgba(255,248,240,.7);
+      --shadow:    0 4px 20px rgba(255,107,157,.1);
+      --radius:    20px;
+      --radius-sm: 14px;
+      --font-num:  inherit;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -99,46 +238,6 @@
       flex: 1;
     }
     .header-title span { color: var(--text2); font-weight: 300; margin-left: 6px; font-size: 12px; }
-    .theme-btn {
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--panel2);
-      color: var(--text2);
-      border-radius: var(--radius-sm);
-      padding: 5px 12px;
-      font-size: 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      transition: all .15s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-    }
-    .theme-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .theme-btn .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-    .reload-btn {
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text2);
-      border-radius: var(--radius-sm);
-      padding: 5px 10px;
-      font-size: 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      transition: all .15s;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .reload-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .last-update {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      color: var(--text3);
-      white-space: nowrap;
-    }
 
     /* ─── TABS ─── */
     .tabs {
@@ -353,10 +452,7 @@
     }
     .detail-table-wrap table thead th:first-child { padding-left: 52px; }
     .detail-table-wrap table tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,.025);
-    }
-    [data-theme="light"] .detail-table-wrap table tbody tr {
-      border-bottom: 1px solid rgba(0,0,0,.04);
+      border-bottom: 1px solid var(--border2);
     }
     .detail-table-wrap table tbody tr:last-child { border-bottom: none; }
     .detail-table-wrap table tbody td {
@@ -574,7 +670,6 @@
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .header-title span { display: none; }
-      .last-update { display: none; }
       thead th.hide-mobile, tbody td.hide-mobile { display: none; }
     }
     @media (max-width: 480px) {
@@ -582,10 +677,58 @@
       .tabs { padding: 0 12px; }
       .tab-btn { padding: 12px 10px; font-size: 12px; }
     }
+
+    /* ── style-switcher UI ── */
+    .style-switcher { display:flex; align-items:center; gap:4px; margin-left:auto; }
+    .style-btn {
+      background:none; border:2px solid transparent; border-radius:var(--radius-sm);
+      font-size:18px; width:36px; height:36px; cursor:pointer;
+      transition:border-color .2s, transform .15s;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .style-btn:hover { transform:scale(1.15); }
+    .style-btn.active { border-color:var(--accent, var(--blue)); }
+    .theme-divider { width:1px; height:24px; background:var(--border); margin:0 4px; }
+    .dark-toggle {
+      background:none; border:2px solid var(--border); border-radius:var(--radius-sm);
+      font-size:16px; width:36px; height:36px; cursor:pointer;
+      transition:border-color .2s;
+    }
+    .dark-toggle:hover { border-color:var(--accent, var(--blue)); }
+
+    /* ── Glass 風格：毛玻璃效果 ── */
+    [data-style="glass"] body { background: var(--bg-gradient, var(--bg)); }
+    [data-style="glass"] .stat-card,
+    [data-style="glass"] .table-wrap,
+    [data-style="glass"] .header,
+    [data-style="glass"] .tabs {
+      backdrop-filter: var(--glass-blur, blur(12px));
+      -webkit-backdrop-filter: var(--glass-blur, blur(12px));
+      background: var(--panel);
+    }
+    [data-style="glass"] .stat-card {
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    /* ── Industrial 風格：等寬數字、accent 左邊框 ── */
+    [data-style="industrial"] .stat-num { font-family: var(--font-num); letter-spacing: 2px; }
+    [data-style="industrial"] .stat-card { border-left: 3px solid var(--accent); border-radius:0; }
+    [data-style="industrial"] .tab-btn { text-transform: uppercase; letter-spacing: 1px; font-size:11px; }
+    [data-style="industrial"] .header { border-bottom: 2px solid var(--accent); }
+    [data-style="industrial"] .group-row { border-left: 3px solid var(--accent); }
+
+    /* ── Cute 風格：大字重、emoji 數字裝飾 ── */
+    [data-style="cute"] .stat-num { font-weight: 900; font-size: 2.8rem; }
+    [data-style="cute"] .stat-card { border-radius: var(--radius); box-shadow: var(--shadow); }
+    [data-style="cute"] .tab-btn.active { background: var(--accent); color: #fff; border-radius: 20px; }
+    [data-style="cute"] .header { border-bottom: 3px solid var(--accent); }
+    [data-style="cute"] .group-row { border-radius: var(--radius); }
+    [data-style="cute"] .badge { border-radius: 99px; font-weight:700; }
   </style>
 <script id="static-data">
 // STATIC_DATA_START
-const STATIC_DATA = {"generated":"2026/03/30 15:13","blanks":[{"lot":"S180726002-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 GP","note":"-"},{"lot":"S160511003-R","spec":"(QZR520X800X10-R PSM)","wh":"A倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S180514011-R","spec":"(QZR520X800X10-R)","wh":"B倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S201022017-R","spec":"(QZ850X1000X10-R)","wh":"B倉","car":"Case","pur":"850x1000 Direct 補正片","note":"有光阻(已無使用需求?) / 誤植成 L5021611 批號"},{"lot":"S201221016-R","spec":"(QZ520X800X10-R )","wh":"A倉","car":"Case","pur":"New P8 Light test","note":"Eric mail"},{"lot":"T10225057","spec":"(QZ700X800X8HD)","wh":"A倉","car":"Case","pur":"送去台灣U.L 確認SLM 後付二次成膜","note":"-"},{"lot":"S200531001","spec":"(QZR800X920X10.0 Rim-PSM)","wh":"A倉","car":"Case","pur":"PSM 實驗片","note":"-"},{"lot":"S220129006-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 Direct","note":"有光阻"},{"lot":"121231-18E","spec":"(QZ700X800X8)","wh":"A倉","car":"Case","pur":"7080 GP","note":"無使用需求"},{"lot":"S201221004-R","spec":"(QZ520X800X10)","wh":"A倉","car":"Case","pur":"描畫借入硫酸根實驗片","note":"Eric mail"},{"lot":"S181205016-R","spec":"(QZ800X920X10)","wh":"B倉","car":"台車","pur":"MMS Daily mask","note":"-"},{"lot":"S250921004-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"GBM 實驗片","note":"寫過 TK 後付驗證 (寫歪)+GBM實驗*1"},{"lot":"S240602001-R","spec":"(QZR980X1550X10-R)","wh":"B倉","car":"Case","pur":"98155 Direct 補正片","note":"-"},{"lot":"SF251031-01HA9","spec":"(QZR850X1200X10)","wh":"A倉","car":"Case","pur":"CST HA 8512 Monthly","note":"-"},{"lot":"S250921005-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"8092 Monthly","note":"寫過一次 (TI)"},{"lot":"S241101009-R","spec":"(QZR800X920X8)","wh":"B倉","car":"Case","pur":"Pattern shift 檢查機標準片","note":"無使用需求(?)"},{"lot":"SR240807-05HA9","spec":"(QZR980X1150X13)","wh":"B倉","car":"Case","pur":"Nikon CD測試實驗品","note":"-"},{"lot":"S250312007-R","spec":"(QZR1220X1400X13SC-R)","wh":"B倉","car":"Case","pur":"1214 SC 後付驗證片","note":"-"},{"lot":"S250314006-R","spec":"(QZR1220X1400X13 MoSi-PSM)","wh":"B倉","car":"台車","pur":"PSM CD測試實驗片","note":"-"},{"lot":"S240107004-R","spec":"(QZR850X1200X10)","wh":"B倉","car":"Case","pur":"TG 8512 Direct","note":"-"},{"lot":"S241126002","spec":"(QZ980X1550X10)","wh":"B倉","car":"台車","pur":"98155 GP","note":"-"},{"lot":"S250921009-R","spec":"(QZR1220X1400X13)","wh":"A倉","car":"Case","pur":"1214 GP (新基板未寫)","note":"-"},{"lot":"S240820300","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"TK 後付驗證片"},{"lot":"240717-02HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"已使用待歸還 (TC BSLR testkey)"},{"lot":"240717-01HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"未使用，有光阻 (留存使用)"},{"lot":"SR240604-01HAOD5","spec":"(QZR850X1200X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"已寫 Monthly (留存使用)"},{"lot":"S250922001","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"Case","pur":"AFS BSLR testkey 測試","note":"與 L5-21092118 互換帳 (再成膜送錯)"},{"lot":"S250909001","spec":"(QZ520X800X10 MoSi-PSM)","wh":"B倉","car":"台車","pur":"TK PSM test key確認","note":"-"},{"lot":"S250926010-R","spec":"(QZR1220X1400X13 ISM-BSLR)","wh":"B倉","car":"台車","pur":"ISM CD NG 品","note":""},{"lot":"R260308-01HA9","spec":"(QZR800X920X10)","wh":"A倉","car":"Case","pur":"8092 CST Monthly","note":""}],"s6012":{"unused":86,"scrap":16,"rows":[{"emp":"T22010 (陳健煌)","time":"2026/3/23 下午 3:52:06","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Reg out","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/17 下午 3:06:26","mth":"報廢","mch":"其他","pat":"-","pm":"-","note":"補登記"},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 11:57:36","mth":"報廢","mch":"TI","pat":"Stage stain","pm":"Stage stain 確認","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 7:13:55","mth":"報廢","mch":"TI","pat":"座標連續量測","pm":"Stage stain","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 下午 3:12:06","mth":"報廢","mch":"TC","pat":"HOYA#3 hr beam alpha","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 上午 9:11:00","mth":"報廢","mch":"TC","pat":"HOYA#2","pm":"Laser exchange","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/5 下午 3:28:39","mth":"報廢","mch":"TC","pat":"HOYA","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/5 上午 10:04:34","mth":"報廢","mch":"TC","pat":"Monitor#2","pm":"Laser exchange","note":"X butting, sweeplength, focus offset, 降10% dose"},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:29","mth":"報廢","mch":"其他","pat":"N/A","pm":"光阻滴到水","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:11","mth":"報廢","mch":"TC","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:54:30","mth":"報廢","mch":"TK","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:06:00","mth":"報廢","mch":"TK","pat":"Hoya","pm":"Shutdown","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:05:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 3:04:44","mth":"報廢","mch":"TI","pat":"HOYA#2","pm":"斷電後CD結果待","note":"前一片 high side fail"},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 1:20:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"斷電CD結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 11:57:39","mth":"報廢","mch":"TI","pat":"Monitor#2 smile+highside","pm":"斷電cd結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 6:04:12","mth":"報廢","mch":"TI","pat":"Monitor#1","pm":"斷電後CD結果待確認","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/3 下午 3:57:45","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Shutdown","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 上午 10:40:00","mth":"報廢","mch":"TC","pat":"Motnitor#1","pm":"台電異常斷電","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 7:18:27","mth":"報廢","mch":"TI","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 4:26:44","mth":"報廢","mch":"TK","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 上午 11:31:00","mth":"報廢","mch":"TK","pat":"monitor","pm":"斷電復機2","note":""},{"emp":"T22015 (陳泓均)","time":"2026/2/10 下午 1:53:43","mth":"購入","mch":"其他","pat":"-","pm":"-","note":"40"},{"emp":"T16011 (詹欣融)","time":"2026/1/30 上午 1:30:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Pattern Shift 調機","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 6:00:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"擦去水污"},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 4:30:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"有水污"},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-07","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-08","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-09","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T24008 (邱俊良)","time":"2026/1/24 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"F-rack replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T16011 (詹欣融)","time":"2026/1/4 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/29 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Cliam","pm":"butting","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"kibpec","pm":"mura","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/23 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"HR,beam balance improve","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"QPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"QPM","note":""},{"emp":"T24008 (邱俊良)","time":"2025/12/19 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"Digital board replacement check","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/8 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 上午 8:49:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"P5","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 下午 3:52:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Skew ng","note":""}]}};
+const STATIC_DATA = {"generated":"2026/03/30 15:44","blanks":[{"lot":"S180726002-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 GP","note":"-"},{"lot":"S160511003-R","spec":"(QZR520X800X10-R PSM)","wh":"A倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S180514011-R","spec":"(QZR520X800X10-R)","wh":"B倉","car":"Case","pur":"台灣U.L測試片可以做任何使用","note":"-"},{"lot":"S201022017-R","spec":"(QZ850X1000X10-R)","wh":"B倉","car":"Case","pur":"850x1000 Direct 補正片","note":"有光阻(已無使用需求?) / 誤植成 L5021611 批號"},{"lot":"S201221016-R","spec":"(QZ520X800X10-R )","wh":"A倉","car":"Case","pur":"New P8 Light test","note":"Eric mail"},{"lot":"T10225057","spec":"(QZ700X800X8HD)","wh":"A倉","car":"Case","pur":"送去台灣U.L 確認SLM 後付二次成膜","note":"-"},{"lot":"S200531001","spec":"(QZR800X920X10.0 Rim-PSM)","wh":"A倉","car":"Case","pur":"PSM 實驗片","note":"-"},{"lot":"S220129006-R","spec":"(QZR1220X1400X13-R)","wh":"B倉","car":"台車","pur":"1214 Direct","note":"有光阻"},{"lot":"121231-18E","spec":"(QZ700X800X8)","wh":"A倉","car":"Case","pur":"7080 GP","note":"無使用需求"},{"lot":"S201221004-R","spec":"(QZ520X800X10)","wh":"A倉","car":"Case","pur":"描畫借入硫酸根實驗片","note":"Eric mail"},{"lot":"S181205016-R","spec":"(QZ800X920X10)","wh":"B倉","car":"台車","pur":"MMS Daily mask","note":"-"},{"lot":"S250921004-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"GBM 實驗片","note":"寫過 TK 後付驗證 (寫歪)+GBM實驗*1"},{"lot":"S240602001-R","spec":"(QZR980X1550X10-R)","wh":"B倉","car":"Case","pur":"98155 Direct 補正片","note":"-"},{"lot":"SF251031-01HA9","spec":"(QZR850X1200X10)","wh":"A倉","car":"Case","pur":"CST HA 8512 Monthly","note":"-"},{"lot":"S250921005-R","spec":"(QZR800X920X10)","wh":"B倉","car":"台車","pur":"8092 Monthly","note":"寫過一次 (TI)"},{"lot":"S241101009-R","spec":"(QZR800X920X8)","wh":"B倉","car":"Case","pur":"Pattern shift 檢查機標準片","note":"無使用需求(?)"},{"lot":"SR240807-05HA9","spec":"(QZR980X1150X13)","wh":"B倉","car":"Case","pur":"Nikon CD測試實驗品","note":"-"},{"lot":"S250312007-R","spec":"(QZR1220X1400X13SC-R)","wh":"B倉","car":"Case","pur":"1214 SC 後付驗證片","note":"-"},{"lot":"S250314006-R","spec":"(QZR1220X1400X13 MoSi-PSM)","wh":"B倉","car":"台車","pur":"PSM CD測試實驗片","note":"-"},{"lot":"S240107004-R","spec":"(QZR850X1200X10)","wh":"B倉","car":"Case","pur":"TG 8512 Direct","note":"-"},{"lot":"S241126002","spec":"(QZ980X1550X10)","wh":"B倉","car":"台車","pur":"98155 GP","note":"-"},{"lot":"S250921009-R","spec":"(QZR1220X1400X13)","wh":"A倉","car":"Case","pur":"1214 GP (新基板未寫)","note":"-"},{"lot":"S240820300","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"TK 後付驗證片"},{"lot":"240717-02HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"台車","pur":"成膜超過一年轉技術基板","note":"已使用待歸還 (TC BSLR testkey)"},{"lot":"240717-01HAOD5","spec":"(QZ800X945X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"未使用，有光阻 (留存使用)"},{"lot":"SR240604-01HAOD5","spec":"(QZR850X1200X10 GTM BSLR)","wh":"B倉","car":"Case","pur":"成膜超過一年轉技術基板","note":"已寫 Monthly (留存使用)"},{"lot":"S250922001","spec":"(QZ800X920X10 VTL)","wh":"B倉","car":"Case","pur":"AFS BSLR testkey 測試","note":"與 L5-21092118 互換帳 (再成膜送錯)"},{"lot":"S250909001","spec":"(QZ520X800X10 MoSi-PSM)","wh":"B倉","car":"台車","pur":"TK PSM test key確認","note":"-"},{"lot":"S250926010-R","spec":"(QZR1220X1400X13 ISM-BSLR)","wh":"B倉","car":"台車","pur":"ISM CD NG 品","note":""},{"lot":"R260308-01HA9","spec":"(QZR800X920X10)","wh":"A倉","car":"Case","pur":"8092 CST Monthly","note":""}],"s6012":{"unused":86,"scrap":16,"rows":[{"emp":"T22010 (陳健煌)","time":"2026/3/23 下午 3:52:06","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Reg out","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/17 下午 3:06:26","mth":"報廢","mch":"其他","pat":"-","pm":"-","note":"補登記"},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 11:57:36","mth":"報廢","mch":"TI","pat":"Stage stain","pm":"Stage stain 確認","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/16 上午 7:13:55","mth":"報廢","mch":"TI","pat":"座標連續量測","pm":"Stage stain","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 下午 3:12:06","mth":"報廢","mch":"TC","pat":"HOYA#3 hr beam alpha","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/6 上午 9:11:00","mth":"報廢","mch":"TC","pat":"HOYA#2","pm":"Laser exchange","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/5 下午 3:28:39","mth":"報廢","mch":"TC","pat":"HOYA","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/5 上午 10:04:34","mth":"報廢","mch":"TC","pat":"Monitor#2","pm":"Laser exchange","note":"X butting, sweeplength, focus offset, 降10% dose"},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:29","mth":"報廢","mch":"其他","pat":"N/A","pm":"光阻滴到水","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:55:11","mth":"報廢","mch":"TC","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T16011 (詹欣融)","time":"2026/3/4 下午 10:54:30","mth":"報廢","mch":"TK","pat":"Hoya","pm":"工廠跳電","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:06:00","mth":"報廢","mch":"TK","pat":"Hoya","pm":"Shutdown","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/4 上午 11:05:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Laser exchange","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 3:04:44","mth":"報廢","mch":"TI","pat":"HOYA#2","pm":"斷電後CD結果待","note":"前一片 high side fail"},{"emp":"T22015 (陳泓均)","time":"2026/3/4 上午 1:20:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"斷電CD結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 11:57:39","mth":"報廢","mch":"TI","pat":"Monitor#2 smile+highside","pm":"斷電cd結果待","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 下午 6:04:12","mth":"報廢","mch":"TI","pat":"Monitor#1","pm":"斷電後CD結果待確認","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/3 下午 3:57:45","mth":"報廢","mch":"TC","pat":"Monitor","pm":"Shutdown","note":""},{"emp":"T22015 (陳泓均)","time":"2026/3/3 上午 10:40:00","mth":"報廢","mch":"TC","pat":"Motnitor#1","pm":"台電異常斷電","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 7:18:27","mth":"報廢","mch":"TI","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 下午 4:26:44","mth":"報廢","mch":"TK","pat":"Monitor","pm":"斷電後復機","note":""},{"emp":"T17027 (張明時)","time":"2026/3/2 上午 11:31:00","mth":"報廢","mch":"TK","pat":"monitor","pm":"斷電復機2","note":""},{"emp":"T22015 (陳泓均)","time":"2026/2/10 下午 1:53:43","mth":"購入","mch":"其他","pat":"-","pm":"-","note":"40"},{"emp":"T16011 (詹欣融)","time":"2026/1/30 上午 1:30:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Pattern Shift 調機","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 6:00:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"擦去水污"},{"emp":"T22010 (陳健煌)","time":"2026/1/29 下午 4:30:00","mth":"報廢","mch":"TI","pat":"Test pattern","pm":"Pattern Shift 實驗","note":"有水污"},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-07","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-08","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"報廢","mch":"其他","pat":"HEK 送回","pm":"5910-04-09","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T22015 (陳泓均)","time":"2026/1/29 上午 12:00:00","mth":"留存","mch":"其他","pat":"QZ","pm":"QZ","note":""},{"emp":"T24008 (邱俊良)","time":"2026/1/24 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"F-rack replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2026/1/5 上午 12:00:00","mth":"報廢","mch":"TI","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T16011 (詹欣融)","time":"2026/1/4 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/30 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/29 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"MPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"Cliam","pm":"butting","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/26 上午 12:00:00","mth":"報廢","mch":"TI","pat":"kibpec","pm":"mura","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/23 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"HR,beam balance improve","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"Monitor","pm":"QPM","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/22 上午 12:00:00","mth":"報廢","mch":"TC","pat":"HOYA","pm":"QPM","note":""},{"emp":"T24008 (邱俊良)","time":"2025/12/19 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"Digital board replacement check","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/9 上午 12:00:00","mth":"報廢","mch":"TK","pat":"HOYA","pm":"laser replace.","note":""},{"emp":"T22010 (陳健煌)","time":"2025/12/8 上午 12:00:00","mth":"報廢","mch":"TK","pat":"Monitor","pm":"laser replace.","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"其他","time":"2025/12/4 上午 12:00:00","mth":"報廢","mch":"TC","pat":"十周年","pm":"十周年","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 上午 8:49:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"P5","note":""},{"emp":"T22010 (陳健煌)","time":"2026/3/27 下午 3:52:00","mth":"報廢","mch":"TI","pat":"Monitor","pm":"Skew ng","note":""}]}};
 // STATIC_DATA_END
 </script>
 </head>
@@ -594,19 +737,14 @@ const STATIC_DATA = {"generated":"2026/03/30 15:13","blanks":[{"lot":"S180726002
 <!-- HEADER -->
 <header class="header">
   <div class="header-logo">庫存管理系統</div>
-  <div class="header-title">
-    基板庫存管理系統
-    <span>Photomask Blank Inventory</span>
+  <div class="header-title"></div>
+  <div class="style-switcher">
+    <button class="style-btn" data-style="industrial" title="工業風">🏭</button>
+    <button class="style-btn" data-style="glass" title="玻璃風">🔮</button>
+    <button class="style-btn" data-style="cute" title="可愛風">🍬</button>
+    <div class="theme-divider"></div>
+    <button class="dark-toggle" id="darkToggle" title="切換深淺色">🌙</button>
   </div>
-  <span class="last-update" id="lastUpdate"></span>
-  <button class="reload-btn" onclick="reloadData()" title="重新載入資料">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.85"/></svg>
-    重新載入
-  </button>
-  <button class="theme-btn" onclick="toggleTheme()">
-    <span class="dot"></span>
-    <span id="themeLabel">淺色</span>
-  </button>
 </header>
 
 <!-- TABS -->
@@ -997,7 +1135,6 @@ function renderBlanks(rows, url) {
 
   html += `</tbody></table></div>`;
   document.getElementById('blanks-content').innerHTML = html;
-  updateLastUpdate();
 }
 
 function toggleExpand(id) {
@@ -1139,7 +1276,6 @@ function render6012(rows, headers) {
   document.getElementById('g6012-content').innerHTML = html;
   // Store cols for filter
   window._6012Cols = { colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge };
-  updateLastUpdate();
 }
 
 function render6012Rows(rows, colEmployee, colTime, colMethod, colMachine, colPattern, colPM, colNote, colAdj, methodBadge) {
@@ -1243,18 +1379,22 @@ function formatTime(t) {
 
 
 // ════════════════════════════════════════════
-//  THEME
+//  STYLE & THEME
 // ════════════════════════════════════════════
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  document.getElementById('themeLabel').textContent = theme === 'dark' ? '淺色' : '深色';
+function applyStyle(style) {
+  document.documentElement.setAttribute('data-style', style);
+  localStorage.setItem('preferredStyle', style);
+  document.querySelectorAll('.style-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.style === style);
+  });
 }
 
-function toggleTheme() {
-  const cur = document.documentElement.dataset.theme;
-  const next = cur === 'dark' ? 'light' : 'dark';
-  localStorage.setItem(LS.THEME, next);
-  applyTheme(next);
+function toggleDark() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('preferredTheme', next);
+  document.getElementById('darkToggle').textContent = next === 'dark' ? '🌙' : '☀️';
 }
 
 // ════════════════════════════════════════════
@@ -1274,32 +1414,39 @@ function escHtml(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function updateLastUpdate() {
-  const el = document.getElementById('lastUpdate');
-  if (el) {
-    const now = new Date();
-    el.textContent = `更新: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-  }
-}
-
-function reloadData() {
-  const activeTab = document.querySelector('.tab-content.active')?.id;
-  if (activeTab === 'tab-blanks' || !activeTab) { loadBlanks(); load6012(); }
-  else if (activeTab === 'tab-6012') { load6012(); }
-}
 
 // ════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════
-function init() {
-  // Theme
-  const savedTheme = localStorage.getItem(LS.THEME) || 'dark';
-  applyTheme(savedTheme);
 
+// 主題與風格初始化（在 DOMContentLoaded 前執行，避免 FOUC）
+(function() {
+  const savedStyle = localStorage.getItem('preferredStyle') || 'industrial';
+  const savedTheme = localStorage.getItem('preferredTheme') || 'dark';
+  document.documentElement.setAttribute('data-style', savedStyle);
+  document.documentElement.setAttribute('data-theme', savedTheme);
+})();
+
+function init() {
   // Load data
   loadBlanks();
   load6012();
 }
+
+// 頁面載入後初始化按鈕狀態
+document.addEventListener('DOMContentLoaded', function() {
+  const currentStyle = document.documentElement.getAttribute('data-style') || 'industrial';
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  document.querySelectorAll('.style-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.style === currentStyle);
+    btn.addEventListener('click', () => applyStyle(btn.dataset.style));
+  });
+  const darkToggle = document.getElementById('darkToggle');
+  if (darkToggle) {
+    darkToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+    darkToggle.addEventListener('click', toggleDark);
+  }
+});
 
 init();
 </script>
