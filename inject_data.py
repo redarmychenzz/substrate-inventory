@@ -31,41 +31,26 @@ def find_col(headers, keys):
     return -1
 
 def parse_blanks(rows):
-    # 從標題列找各欄位的實際 index（用欄位名稱比對，不用固定數字）
-    header = rows[0]
-    def find(name):
-        for i, v in enumerate(header):
-            if v.strip() == name:
-                return i
-        return -1
-
-    col_wh   = find('庫別')      # D欄
-    col_car  = find('載具')      # E欄
-    col_spec = find('規格')      # I欄
-    col_lot  = find('Metal Lot') # J欄
-    col_pur  = find('使用目的')  # N欄
-    col_note = find('備註')      # O欄
-
-    print(f'  欄位對應: 庫別={col_wh}, 載具={col_car}, 規格={col_spec}, Metal Lot={col_lot}, 使用目的={col_pur}, 備註={col_note}')
-
+    # 根據診斷確認的欄位 index（CSV 第1列是標題，資料從第2列開始）
+    # [3]=庫別, [4]=載具, [8]=規格, [9]=Metal Lot(批號), [13]=使用目的, [14]=備註
     result = []
     for row in rows[1:]:
-        if len(row) <= max(col_wh, col_car, col_spec, col_lot, col_pur, col_note):
+        if len(row) < 15:
             continue
-        wh = row[col_wh].strip() if col_wh >= 0 else ''
+        wh = row[3].strip()
         if 'A倉' not in wh and 'B倉' not in wh:
             continue
-        lot  = row[col_lot].strip()  if col_lot  >= 0 else ''
-        spec = row[col_spec].strip() if col_spec >= 0 else ''
+        lot  = row[9].strip()
+        spec = row[8].strip()
         if not lot and not spec:
             continue
         result.append({
             'lot':  lot,
             'spec': spec,
             'wh':   wh,
-            'car':  row[col_car].strip()  if col_car  >= 0 else '',
-            'pur':  row[col_pur].strip()  if col_pur  >= 0 else '',
-            'note': row[col_note].strip() if col_note >= 0 else '',
+            'car':  row[4].strip(),
+            'pur':  row[13].strip(),
+            'note': row[14].strip(),
         })
     return result
 
