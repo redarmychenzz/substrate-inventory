@@ -784,6 +784,15 @@
     [data-style="cute"] .header { border-bottom: 3px solid var(--accent); }
     [data-style="cute"] .group-row { border-radius: var(--radius); }
     [data-style="cute"] .badge { border-radius: 99px; font-weight:700; }
+  .lock-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+  .lock-box{background:var(--bg-panel);border:1px solid var(--bd);border-radius:10px;padding:36px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;min-width:300px}
+  .lock-title{font-size:15px;font-weight:600;color:var(--tx);font-family:var(--mono);letter-spacing:.04em}
+  .lock-sub{font-size:11px;color:var(--tx3);font-family:var(--mono)}
+  .lock-input{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:10px 14px;font-size:16px;font-family:var(--mono);color:var(--tx);outline:none;text-align:center;letter-spacing:.15em;transition:border-color .18s}
+  .lock-input:focus{border-color:var(--blue)}
+  .lock-btn{width:100%;background:var(--blue);border:none;border-radius:5px;padding:10px;font-size:13px;font-family:var(--mono);color:#fff;cursor:pointer;transition:opacity .18s}
+  .lock-btn:hover{opacity:.85}
+  .lock-err{font-size:11px;color:var(--red);font-family:var(--mono);min-height:16px}
   </style>
 <script id="static-data">
 // STATIC_DATA_START
@@ -792,6 +801,18 @@ const STATIC_DATA = null;
 </script>
 </head>
 <body>
+
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-box">
+    <div class="lock-title">🔒 基板庫存管理系統</div>
+    <div class="lock-sub">HOYA · 請輸入存取密碼</div>
+    <input class="lock-input" id="lockInput" type="password"
+           placeholder="••••••••"
+           onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="lock-btn" onclick="checkPwd()">進入</button>
+    <div class="lock-err" id="lockErr"></div>
+  </div>
+</div>
 
 <!-- HEADER -->
 <header class="header">
@@ -847,6 +868,38 @@ const STATIC_DATA = null;
 
 <script>
 'use strict';
+
+const PWD_HASH = '80bcbc8116c90758e6efd4740c94caab840d53dc3fe1ebe4003be10b67127eef';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPwd() {
+  const val = document.getElementById('lockInput').value;
+  const h   = await sha256(val);
+  if (h === PWD_HASH) {
+    localStorage.setItem('hy_auth', h);
+    document.getElementById('lockScreen').style.display = 'none';
+  } else {
+    const err = document.getElementById('lockErr');
+    err.textContent = '密碼錯誤，請重試';
+    document.getElementById('lockInput').value = '';
+    document.getElementById('lockInput').focus();
+    setTimeout(() => { err.textContent = ''; }, 3000);
+  }
+}
+
+async function initAuth() {
+  const saved = localStorage.getItem('hy_auth');
+  if (saved && saved === PWD_HASH) {
+    document.getElementById('lockScreen').style.display = 'none';
+  } else {
+    document.getElementById('lockScreen').style.display = 'flex';
+    setTimeout(() => document.getElementById('lockInput').focus(), 100);
+  }
+}
 
 // ════════════════════════════════════════════
 //  CONFIG
@@ -1487,7 +1540,8 @@ function escHtml(s) {
   document.documentElement.setAttribute('data-theme', savedTheme);
 })();
 
-function init() {
+async function init() {
+  await initAuth();
   // Load data
   loadBlanks();
   load6012();
