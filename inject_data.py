@@ -48,6 +48,7 @@ def parse_blanks(rows):
             'spec': spec,
             'wh':   wh,
             'car':  row[4].strip(),
+            'thk':  row[6].strip() if len(row) > 6 else '',
             'pur':  row[13].strip(),
             'note': row[14].strip(),
         })

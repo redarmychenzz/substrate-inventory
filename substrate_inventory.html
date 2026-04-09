@@ -1067,9 +1067,9 @@ function parseSize(spec) {
 // ════════════════════════════════════════════
 async function loadBlanks() {
   if (STATIC_DATA !== null) {
-    const hdr = ['規格', 'Metal Lot', '庫別', '載具', '使用目的', '備註'];
+    const hdr = ['規格', 'Metal Lot', '庫別', '載具', '板厚', '使用目的', '備註'];
     const rows = [hdr, ...STATIC_DATA.blanks.map(e =>
-      [e.spec||'', e.lot||'', e.wh||'', e.car||'', e.pur||'', e.note||''])];
+      [e.spec||'', e.lot||'', e.wh||'', e.car||'', e.thk||'', e.pur||'', e.note||''])];
     renderBlanks(rows, '靜態資料 ' + (STATIC_DATA.generated || ''));
     return;
   }
@@ -1103,6 +1103,7 @@ function renderBlanks(rows, url) {
   const colCarrier = findCol(headers, ['載具', 'carrier']);
   const colPurpose = findCol(headers, ['使用目的', '目的', 'purpose', '用途']);
   const colNote    = findCol(headers, ['備註', 'note']);
+  const colThk     = findCol(headers, ['板厚', 'thickness', 'thk']);
 
   // Filter valid rows (must have warehouse info)
   const valid = data.filter(r => {
@@ -1210,6 +1211,7 @@ function renderBlanks(rows, url) {
                   <tr>
                     <th>批號 / Lot No</th>
                     <th>規格</th>
+                    <th>板厚</th>
                     <th>庫別</th>
                     <th>載具</th>
                     <th class="hide-mobile">使用目的</th>
@@ -1223,6 +1225,7 @@ function renderBlanks(rows, url) {
       const lot = (colLot >= 0 ? r[colLot] : '') || '—';
       const spec = (colSize >= 0 ? r[colSize] : '') || '';
       const carrier = (colCarrier >= 0 ? r[colCarrier] : '') || '—';
+      const thk = (colThk >= 0 ? r[colThk] : '') || '';
       const purpose = (colPurpose >= 0 ? r[colPurpose] : '') || '';
       const note = (colNote >= 0 ? r[colNote] : '') || '';
       const whClass = wh === 'A倉' ? 'blue' : 'amber';
@@ -1230,6 +1233,7 @@ function renderBlanks(rows, url) {
                   <tr>
                     <td class="lot-id">${escHtml(lot)}</td>
                     <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:11px;">${escHtml(spec || '—')}</td>
+                    <td>${thk && thk !== '-' && thk !== '' ? escHtml(thk) + ' mm' : '—'}</td>
                     <td><span class="badge ${whClass}">${escHtml(wh)}</span></td>
                     <td>${escHtml(carrier)}</td>
                     <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
