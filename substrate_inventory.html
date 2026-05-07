@@ -1241,7 +1241,7 @@ function renderBlanks(rows, url) {
                     <td>${escHtml(carrier)}</td>
                     <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
                     <td class="hide-mobile note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
-                    <td style="text-align:center">${exp.trim() === '✗' ? '<span style="color:var(--red);font-weight:700">✗</span>' : ''}</td>
+                    <td style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700">✘</span>' : ''}</td>
                   </tr>`;
     }
 
