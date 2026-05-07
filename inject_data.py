@@ -51,6 +51,7 @@ def parse_blanks(rows):
             'thk':  row[6].strip() if len(row) > 6 else '',
             'pur':  row[13].strip(),
             'note': row[14].strip(),
+            'exp':  row[15].strip() if len(row) > 15 else '',
         })
     return result
 

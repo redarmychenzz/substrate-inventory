@@ -1067,9 +1067,9 @@ function parseSize(spec) {
 // ════════════════════════════════════════════
 async function loadBlanks() {
   if (STATIC_DATA !== null) {
-    const hdr = ['規格', 'Metal Lot', '庫別', '載具', '板厚', '使用目的', '備註'];
+    const hdr = ['規格', 'Metal Lot', '庫別', '載具', '板厚', '使用目的', '備註', '費用化'];
     const rows = [hdr, ...STATIC_DATA.blanks.map(e =>
-      [e.spec||'', e.lot||'', e.wh||'', e.car||'', e.thk||'', e.pur||'', e.note||''])];
+      [e.spec||'', e.lot||'', e.wh||'', e.car||'', e.thk||'', e.pur||'', e.note||'', e.exp||''])];
     renderBlanks(rows, '靜態資料 ' + (STATIC_DATA.generated || ''));
     return;
   }
@@ -1104,6 +1104,7 @@ function renderBlanks(rows, url) {
   const colPurpose = findCol(headers, ['使用目的', '目的', 'purpose', '用途']);
   const colNote    = findCol(headers, ['備註', 'note']);
   const colThk     = findCol(headers, ['板厚', 'thickness', 'thk']);
+  const colExp     = findCol(headers, ['費用化', 'exp']);
 
   // Filter valid rows (must have warehouse info)
   const valid = data.filter(r => {
@@ -1216,6 +1217,7 @@ function renderBlanks(rows, url) {
                     <th>載具</th>
                     <th class="hide-mobile">使用目的</th>
                     <th class="hide-mobile">備註</th>
+                    <th>費用化</th>
                   </tr>
                 </thead>
                 <tbody>`;
@@ -1228,6 +1230,7 @@ function renderBlanks(rows, url) {
       const thk = (colThk >= 0 ? r[colThk] : '') || '';
       const purpose = (colPurpose >= 0 ? r[colPurpose] : '') || '';
       const note = (colNote >= 0 ? r[colNote] : '') || '';
+      const exp  = (colExp  >= 0 ? r[colExp]  : '') || '';
       const whClass = wh === 'A倉' ? 'blue' : 'amber';
       html += `
                   <tr>
@@ -1238,6 +1241,7 @@ function renderBlanks(rows, url) {
                     <td>${escHtml(carrier)}</td>
                     <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
                     <td class="hide-mobile note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
+                    <td style="text-align:center">${exp.trim() === '✗' ? '<span style="color:var(--red);font-weight:700">✗</span>' : ''}</td>
                   </tr>`;
     }
 
