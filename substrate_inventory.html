@@ -518,10 +518,12 @@
     .detail-table-wrap table tbody tr:last-child { border-bottom: none; }
     .detail-table-wrap table tbody td {
       padding: 10px 14px 10px 36px;
-      font-family: 'Space Mono', monospace;
-      font-size: 14px;
-      color: #b0b8cc;
-      vertical-align: top;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      color: var(--text);
+      vertical-align: middle;
     }
     .detail-table-wrap .lot-id {
       font-family: 'Space Mono', monospace;
@@ -733,7 +735,7 @@
       letter-spacing: .02em;
     }
     .time-cell { color: var(--text2); font-size: 11.5px; }
-    .note-cell { color: var(--text3); font-style: italic; font-size: 11px; max-width: 200px; }
+    .note-cell { color: var(--text3); font-style: normal; font-size: 13px; max-width: 200px; }
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .header-title span { display: none; }
@@ -1338,11 +1340,11 @@ function renderBlanks(rows, url) {
       html += `
                   <tr>
                     <td class="lot-id" data-label="批號">${escHtml(lot)}</td>
-                    <td data-label="規格" style="font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:11px;">${escHtml(spec || '—')}</td>
-                    <td data-label="板厚">${thk && thk !== '-' && thk !== '' ? escHtml(thk) + ' mm' : '—'}</td>
+                    <td data-label="規格" style="font-family:'DM Sans',sans-serif;color:var(--text2);font-size:13px;font-style:normal;">${escHtml(spec || '—')}</td>
+                    <td data-label="板厚" style="font-family:'Space Mono',monospace;color:var(--text2);font-size:13px;">${thk && thk !== '-' && thk !== '' ? escHtml(thk) + ' mm' : '—'}</td>
                     <td data-label="庫別"><span class="badge ${whClass}">${escHtml(wh)}</span></td>
-                    <td data-label="載具">${escHtml(carrier)}</td>
-                    <td data-label="使用目的" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
+                    <td data-label="載具" style="font-family:'DM Sans',sans-serif;color:var(--text);font-size:13px;">${escHtml(carrier)}</td>
+                    <td data-label="使用目的" style="font-family:'DM Sans',sans-serif;color:var(--text);font-size:13px;">${escHtml(purpose || '—')}</td>
                     <td data-label="備註" class="note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
                     <td data-label="費用化" style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700;font-size:15px">✘</span>' : ''}</td>
                   </tr>`;
