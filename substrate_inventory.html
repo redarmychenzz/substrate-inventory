@@ -507,21 +507,26 @@
     .detail-table-wrap table tbody tr:hover { background: var(--hover); transition: background 150ms; }
     .detail-table-wrap table thead th {
       background: transparent;
-      font-size: 9.5px;
+      font-size: 12px;
       padding: 7px 14px 7px 36px;
-      color: var(--text3);
+      color: #5a6580;
     }
     .detail-table-wrap table thead th:first-child { padding-left: 52px; }
     .detail-table-wrap table tbody tr {
-      border-bottom: 1px solid var(--border2);
+      border-bottom: 1px solid rgba(255,255,255,.05);
     }
     .detail-table-wrap table tbody tr:last-child { border-bottom: none; }
     .detail-table-wrap table tbody td {
-      padding: 8px 14px 8px 36px;
+      padding: 10px 14px 10px 36px;
       font-family: 'Space Mono', monospace;
-      font-size: 11.5px;
-      color: var(--text2);
+      font-size: 14px;
+      color: #b0b8cc;
       vertical-align: top;
+    }
+    .detail-table-wrap .lot-id {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: #e0e8f0;
     }
     .detail-table-wrap table tbody td:first-child { padding-left: 52px; }
 
@@ -543,10 +548,10 @@
     /* ─── BADGES ─── */
     .badge {
       display: inline-flex; align-items: center;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: var(--radius);
       font-family: 'Space Mono', monospace;
-      font-size: 10.5px;
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: .04em;
       white-space: nowrap;
@@ -796,6 +801,66 @@
   .lock-btn{width:100%;background:var(--blue);border:none;border-radius:5px;padding:10px;font-size:13px;font-family:var(--mono);color:#fff;cursor:pointer;transition:opacity .18s}
   .lock-btn:hover{opacity:.85}
   .lock-err{font-size:11px;color:var(--red);font-family:var(--mono);min-height:16px}
+
+  @media (max-width: 768px) {
+    .header {
+      padding: 10px 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .header-logo { font-size: 11px; padding: 4px 10px; }
+    .style-switcher { margin-left: 0; }
+    .style-btn { width: 30px; height: 30px; font-size: 15px; }
+    .dark-toggle { width: 30px; height: 30px; }
+
+    .tabs { padding: 0 12px; }
+    .tab-btn { font-size: 12px; padding: 8px 12px; }
+
+    .main { padding: 12px; }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8px;
+    }
+    .stat-card { padding: 12px; }
+    .stat-num { font-size: 1.8rem !important; }
+
+    .group-row {
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+
+    .col-a, .col-b { display: none; }
+    .col-total { text-align: right; }
+
+    .detail-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .detail-table-wrap table {
+      min-width: 600px;
+    }
+
+    .g6012-stats {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    .stat-num { font-size: 1.6rem !important; }
+
+    .header { padding: 8px 10px; }
+    .style-btn { width: 26px; height: 26px; font-size: 13px; }
+  }
   </style>
 <script id="static-data">
 // STATIC_DATA_START
@@ -1244,7 +1309,7 @@ function renderBlanks(rows, url) {
                     <td>${escHtml(carrier)}</td>
                     <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
                     <td class="hide-mobile note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
-                    <td style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700">✘</span>' : ''}</td>
+                    <td style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700;font-size:15px">✘</span>' : ''}</td>
                   </tr>`;
     }
 
