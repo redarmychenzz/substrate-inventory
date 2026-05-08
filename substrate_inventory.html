@@ -526,7 +526,7 @@
     .detail-table-wrap .lot-id {
       font-family: 'Space Mono', monospace;
       font-size: 13px;
-      color: #e0e8f0;
+      color: var(--heading);
     }
     .detail-table-wrap table tbody td:first-child { padding-left: 52px; }
 
@@ -833,12 +833,47 @@
     .col-a, .col-b { display: none; }
     .col-total { text-align: right; }
 
-    .detail-table-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    .detail-table-wrap table thead {
+      display: none;
     }
-    .detail-table-wrap table {
-      min-width: 600px;
+    .detail-table-wrap table,
+    .detail-table-wrap tbody {
+      display: block;
+      width: 100%;
+    }
+    .detail-table-wrap tbody tr {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 12px;
+      padding: 10px 12px;
+      margin: 0;
+      border-bottom: 1px solid var(--border2);
+      background: var(--expand-bg);
+    }
+    .detail-table-wrap tbody td {
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+      padding: 2px 0;
+    }
+    .detail-table-wrap tbody td::before {
+      content: attr(data-label);
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .detail-table-wrap tbody td:first-child {
+      grid-column: 1 / -1;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--heading);
+      font-weight: 600;
+    }
+    .detail-table-wrap tbody td:last-child {
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .g6012-stats {
@@ -1302,14 +1337,14 @@ function renderBlanks(rows, url) {
       const whClass = wh === 'A倉' ? 'blue' : 'amber';
       html += `
                   <tr>
-                    <td class="lot-id">${escHtml(lot)}</td>
-                    <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:11px;">${escHtml(spec || '—')}</td>
-                    <td>${thk && thk !== '-' && thk !== '' ? escHtml(thk) + ' mm' : '—'}</td>
-                    <td><span class="badge ${whClass}">${escHtml(wh)}</span></td>
-                    <td>${escHtml(carrier)}</td>
-                    <td class="hide-mobile" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
-                    <td class="hide-mobile note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
-                    <td style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700;font-size:15px">✘</span>' : ''}</td>
+                    <td class="lot-id" data-label="批號">${escHtml(lot)}</td>
+                    <td data-label="規格" style="font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:11px;">${escHtml(spec || '—')}</td>
+                    <td data-label="板厚">${thk && thk !== '-' && thk !== '' ? escHtml(thk) + ' mm' : '—'}</td>
+                    <td data-label="庫別"><span class="badge ${whClass}">${escHtml(wh)}</span></td>
+                    <td data-label="載具">${escHtml(carrier)}</td>
+                    <td data-label="使用目的" style="color:var(--text);max-width:220px;">${escHtml(purpose || '—')}</td>
+                    <td data-label="備註" class="note-cell">${escHtml(note && note !== '-' ? note : '')}</td>
+                    <td data-label="費用化" style="text-align:center">${exp.trim() === '✘' ? '<span style="color:var(--red);font-weight:700;font-size:15px">✘</span>' : ''}</td>
                   </tr>`;
     }
 
