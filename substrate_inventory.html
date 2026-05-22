@@ -1379,10 +1379,10 @@ let _6012Rows = [], _6012Headers = [];
 
 async function load6012() {
   if (STATIC_DATA !== null) {
-    const { unused, scrap, rows } = STATIC_DATA.s6012;
+    const { unused, scrap, total, account, rows } = STATIC_DATA.s6012;
     const fakeHdr = [
       'ID',
-      `未使用庫存：${unused||0} 片 ║ 可報廢：${scrap||0} 片 ║ 實際總數量：${rows.length} 片 ║ 帳上數量：— 片 人員工號`,
+      `未使用庫存：${unused||0} 片 ║ 可報廢：${scrap||0} 片 ║ 實際總數量：${total||0} 片 ║ 帳上數量：${account||0} 片 人員工號`,
       '時間', '方式', '機台', '描畫 Pattern', 'PM 項目', '備註', '調倉'
     ];
     const dataRows = rows.map(r => ['', r.emp||'', r.time||'', r.mth||'', r.mch||'', r.pat||'', r.pm||'', r.note||'', '']);
@@ -1458,13 +1458,12 @@ function render6012(rows, headers) {
       <div class="stat-value">${scrap}<span class="stat-unit">片</span></div>
     </div>
     <div class="stat-card teal">
-      <div class="stat-label">紀錄筆數</div>
-      <div class="stat-value">${rows.length}<span class="stat-unit">筆</span></div>
-      <div class="stat-sub">實際 ${realTotal}片 ／ 帳上 ${bookTotal}片</div>
+      <div class="stat-label">實際總數量</div>
+      <div class="stat-value">${realTotal}<span class="stat-unit">片</span></div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">報廢筆數</div>
-      <div class="stat-value">${cntMap['報廢'] || 0}<span class="stat-unit">筆</span></div>
+      <div class="stat-label">帳上數量</div>
+      <div class="stat-value">${bookTotal}<span class="stat-unit">片</span></div>
     </div>
   </div>
   <div class="table-wrap">

@@ -65,6 +65,8 @@ def parse_6012(rows):
 
     unused  = parse_summary(summary_text, '未使用庫存') or None
     scrap   = parse_summary(summary_text, '可報廢') or None
+    total   = parse_summary(summary_text, '實際總數量') or None
+    account = parse_summary(summary_text, '帳上數量') or None
 
     h_idx = -1
     for i, row in enumerate(rows[:12]):
@@ -88,14 +90,14 @@ def parse_6012(rows):
         def g(k): return row[C[k]].strip() if C[k] >= 0 and C[k] < len(row) else ''
         result.append({'emp':g('emp'),'time':g('time'),'mth':g('mth'),
                        'mch':g('mch'),'pat':g('pat'),'pm':g('pm'),'note':g('note')})
-    return unused, scrap, result
+    return unused, scrap, total, account, result
 
-def inject(blanks, unused, scrap, rows_6012):
+def inject(blanks, unused, scrap, total, account, rows_6012):
     generated = datetime.now().strftime('%Y/%m/%d %H:%M')
     static_data = {
         'generated': generated,
         'blanks': blanks,
-        's6012': {'unused': unused, 'scrap': scrap, 'rows': rows_6012}
+        's6012': {'unused': unused, 'scrap': scrap, 'total': total, 'account': account, 'rows': rows_6012}
     }
     js = ('const STATIC_DATA = '
           + json.dumps(static_data, ensure_ascii=False, separators=(',',':'))
@@ -120,10 +122,10 @@ if __name__ == '__main__':
         for i, b in enumerate(blanks[:5]):
             print(f'  [{i}] {b}')
 
-        unused, scrap, log = parse_6012(fetch_csv(GID_6012))
-        print(f'✓ 6012：{len(log)} 筆紀錄，未使用 {unused} 片，可報廢 {scrap} 片')
+        unused, scrap, total, account, log = parse_6012(fetch_csv(GID_6012))
+        print(f'✓ 6012：{len(log)} 筆紀錄，未使用 {unused} 片，可報廢 {scrap} 片，實際總數量 {total} 片，帳上數量 {account} 片')
 
-        generated = inject(blanks, unused, scrap, log)
+        generated = inject(blanks, unused, scrap, total, account, log)
         print(f'✓ 輸出：{HTML_OUT}')
         print(f'  資料時間：{generated}')
 
