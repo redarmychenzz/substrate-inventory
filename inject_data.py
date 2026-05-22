@@ -56,15 +56,19 @@ def parse_blanks(rows):
     return result
 
 def parse_6012(rows):
-    unused, scrap, h_idx = None, None, -1
+    # 從 row[0][1] 解析摘要字串取得統計數字
+    summary_text = rows[0][1] if rows and len(rows[0]) > 1 else ''
+
+    def parse_summary(text, keyword):
+        match = re.search(keyword + r'[：:]\s*(\d+)', text)
+        return int(match.group(1)) if match else 0
+
+    unused  = parse_summary(summary_text, '未使用庫存') or None
+    scrap   = parse_summary(summary_text, '可報廢') or None
+
+    h_idx = -1
     for i, row in enumerate(rows[:12]):
         joined = ' '.join(row)
-        if re.search(r'未使用|available', joined, re.I):
-            nums = [int(x) for x in re.findall(r'\d+', ''.join(row))]
-            if nums: unused = nums[0]
-        if re.search(r'報廢|scrap', joined, re.I):
-            nums = [int(x) for x in re.findall(r'\d+', ''.join(row))]
-            if nums: scrap = nums[0]
         if re.search(r'工號|時間|方式|employee|date|method', joined, re.I):
             h_idx = i
     if h_idx < 0: h_idx = 0
