@@ -22,17 +22,18 @@ echo "正在從 Google Sheets 讀取最新資料..."
 echo ""
 python3 inject_data.py
 
-echo ""
-if [ -f "substrate_inventory_static.html" ]; then
-    echo "==============================="
-    echo "✓ 完成！請將下方檔案上傳到 SharePoint："
+if [ $? -eq 0 ]; then
     echo ""
-    echo "  $(pwd)/substrate_inventory_static.html"
-    echo ""
-    # 自動在 Finder 中顯示該檔案
-    open -R "substrate_inventory_static.html"
-    echo "（已在 Finder 中開啟檔案位置）"
-    echo "==============================="
+    echo "正在上傳到 GitHub..."
+    git add index.html
+    git commit -m "更新庫存資料 $(date '+%Y/%m/%d %H:%M')"
+    git push
+    if [ $? -eq 0 ]; then
+        echo "✓ 已上傳，網頁約 1 分鐘後更新"
+        echo "  網址：https://redarmychenzz.github.io/substrate-inventory/"
+    else
+        echo "✗ 上傳失敗，請確認網路連線"
+    fi
 else
     echo "✗ 輸出檔案不存在，請確認錯誤訊息"
 fi

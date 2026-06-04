@@ -109,6 +109,14 @@ def inject(blanks, unused, scrap, total, account, rows_6012):
     new_html, n = re.subn(pattern, replacement, html, flags=re.DOTALL)
     if n == 0:
         raise ValueError('找不到注入點（STATIC_DATA_START），請確認 HTML 已完成修改')
+
+    # 更新（或新增）<meta name="version"> 為當下 Unix timestamp，強制 PWA 快取失效
+    ts = int(datetime.now().timestamp())
+    version_tag = f'<meta name="version" content="{ts}">'
+    new_html, nv = re.subn(r'<meta\s+name="version"[^>]*>', version_tag, new_html)
+    if nv == 0:
+        new_html = re.sub(r'(<head[^>]*>)', r'\1\n  ' + version_tag, new_html, count=1)
+
     with open(HTML_OUT, 'w', encoding='utf-8') as f:
         f.write(new_html)
     return generated
