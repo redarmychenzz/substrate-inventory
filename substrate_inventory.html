@@ -499,7 +499,7 @@
       max-height: 0;
       transition: max-height 200ms ease;
     }
-    .detail-section.open { max-height: 2000px; }
+    /* .detail-section.open max-height is set dynamically by JS (scrollHeight) */
     .detail-table-wrap {
       background: var(--expand-bg);
       border-bottom: 1px solid var(--border);
@@ -1370,6 +1370,7 @@ function toggleExpand(id) {
   const open = el.classList.toggle('open');
   icon.textContent = open ? '▼' : '▶';
   icon.classList.toggle('open', open);
+  el.style.maxHeight = open ? el.scrollHeight + 'px' : '0';
 }
 
 // ════════════════════════════════════════════
